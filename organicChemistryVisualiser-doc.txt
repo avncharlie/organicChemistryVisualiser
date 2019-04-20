@@ -1,0 +1,332 @@
+
+ ██████╗ ██████╗  ██████╗  █████╗ ███╗   ██╗██╗ ██████╗                 
+██╔═══██╗██╔══██╗██╔════╝ ██╔══██╗████╗  ██║██║██╔════╝                 
+██║   ██║██████╔╝██║  ███╗███████║██╔██╗ ██║██║██║                      
+██║   ██║██╔══██╗██║   ██║██╔══██║██║╚██╗██║██║██║                      
+╚██████╔╝██║  ██║╚██████╔╝██║  ██║██║ ╚████║██║╚██████╗                 
+ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝ ╚═════╝                 
+                                                                        
+ ██████╗██╗  ██╗███████╗███╗   ███╗██╗███████╗████████╗██████╗ ██╗   ██╗
+██╔════╝██║  ██║██╔════╝████╗ ████║██║██╔════╝╚══██╔══╝██╔══██╗╚██╗ ██╔╝
+██║     ███████║█████╗  ██╔████╔██║██║███████╗   ██║   ██████╔╝ ╚████╔╝ 
+██║     ██╔══██║██╔══╝  ██║╚██╔╝██║██║╚════██║   ██║   ██╔══██╗  ╚██╔╝  
+╚██████╗██║  ██║███████╗██║ ╚═╝ ██║██║███████║   ██║   ██║  ██║   ██║   
+ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝   ╚═╝   
+                                                                        
+██╗   ██╗██╗███████╗██╗   ██╗ █████╗ ██╗     ██╗███████╗███████╗██████╗ 
+██║   ██║██║██╔════╝██║   ██║██╔══██╗██║     ██║██╔════╝██╔════╝██╔══██╗
+██║   ██║██║███████╗██║   ██║███████║██║     ██║███████╗█████╗  ██████╔╝
+╚██╗ ██╔╝██║╚════██║██║   ██║██╔══██║██║     ██║╚════██║██╔══╝  ██╔══██╗
+ ╚████╔╝ ██║███████║╚██████╔╝██║  ██║███████╗██║███████║███████╗██║  ██║
+  ╚═══╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝╚══════╝╚══════╝╚═╝  ╚═╝
+
+                          Version: 0.1.0
+
+===============================================================================
+CONTENTS
+
+1. Intro
+2. Data storage
+3. Parsing organic names
+    3.1 Creating the token list 
+    3.2 Parsing the token list into the AST
+    3.3 Parsing the AST into an OrganicCompound
+4. Token data and examples
+    4.1 Parseable tokens
+    4.2 Token followers
+    4.3 Examples of parseable names
+    4.4 Example of a complex AST
+5. Credits
+6. License
+
+
+================================================================================
+1. Intro ~
+
+The core of OCV are tokens. Tokens are the fundamental parts of an organic name.
+Tokens have definitions - text has to follow a certain criteria to be a certain
+type of token.
+
+Each token also has 'follower tokens' - these tokens have to succeed the current
+token for the name to be valid. In this way a valid organic name will follow as
+a chain of tokens 'following' each other in order.
+
+Some tokens are 'Special Tokens' - these tokens either signify the end or start
+of the main chain or a substituent. They are called special tokens as they
+either do not follow any tokens - e.g. the 'nameStart' token - or do not have
+any follower tokens - e.g. the 'mainChainEnd' token. These tokens can be
+recursive in definition - for example the 'nameStart' token corresponds to a
+'substituentStart' or a 'mainChainStart' token.
+
+
+================================================================================
+2. Data storage
+
+All of the data regarding token parsing and organic name information are stored
+in XML files. This is due to the ease of parsing and editing of these files.
+They are stored externally from OCV so that data sets can be updated and changed
+without the program having to be recompiled.
+
+
+================================================================================
+3. Parsing organic names ~
+
+There are three parts to parsing organic names -
+  - Creating a token list
+  - Parsing the token list into an AST (Abstract Syntax Tree)
+  - Parsing the AST into an OrganicCompound object
+
+-------------------------------------------------------------------------------
+3.1. Creating the token list ~
+
+Organic names are first parsed into a list of tokens. These tokens must follow
+each other in valid order for the OCV to continue parsing them. Note that
+invalid organic names can still be created from a valid sequence of tokens,
+for example N-N-ane-5-ol. Token validation only gaurds agains clearly
+invalid cases.
+
+    e.g. token list for 2-hydroxyhex-5-ene-3-yne
+    [
+      { type: 'locantGroup',                value: '2'       },
+      { type: 'hyphen',                     value: ''        },
+      { type: 'functionalGroupSubstituent', value: 'hydroxy' },
+      { type: 'multiplier',                 value: 'hex'     },
+      { type: 'hyphen',                     value: ''        },
+      { type: 'locantGroup',                value: '5'       },
+      { type: 'hyphen',                     value: ''        },
+      { type: 'alkAneEneYneSuffix',         value: 'ene'     },
+      { type: 'hyphen',                     value: ''        },
+      { type: 'locantGroup',                value: '3'       },
+      { type: 'hyphen',                     value: ''        },
+      { type: 'alkAneEneYneSuffix',         value: 'yne'     }
+    ]
+
+-------------------------------------------------------------------------------
+3.2. Parsing the token list into the AST ~
+
+After a list of tokens are created these are then parsed to form
+the AST (Abstract Syntax Tree). This is an intermediary data storage and is
+first parsed form of the organic name. This contains the whole molecule present
+in a nested, heirarchical form. 
+
+    e.g. AST for 2-hydroxyhex-5-ene-3-yne
+    {
+        type: 'organicName',
+        name: '2-hydroxyhex-5-ene-3-yne'
+    
+        compoundTree: {
+            type: 'base',
+            baseType: 'alkane',
+            length: '6',
+    
+            organicGroups: [{
+                type: 'functionalGroup',
+                name: 'alkene',
+                locants: ['5']
+            }, {
+                type: 'functionalGroup',
+                name: 'alkyne',
+                locants: ['3']
+            }, {
+                type: 'functionalGroup',
+                name: 'alcohol',
+                locants: ['2']
+            }]
+        }
+    }
+
+-------------------------------------------------------------------------------
+3.3. Parsing the AST into an OrganicCompound
+
+The AST is an abstract nested formation of a organic name. An OrganicCompound
+however is an detailed, verbose representation of an organic name. It works
+through virtually building the whole organic name atom by atom into one
+interconnected structure. This structure is used when graphically generating the
+object as it contains the most data in an easily accessible format.
+
+
+================================================================================
+4. Token data and examples ~
+
+Below is a list of all the tokens parseable by OCV, all sets of follower tokens,
+examples of parseable names and an example of a more complicated AST structure.
+
+-------------------------------------------------------------------------------
+4.1. Parseable tokens ~
+
+    +--------------------------------+---------------------------+
+    |             Token              |     Example               |
+    +--------------------------------+---------------------------+
+    | hyphen                         | -                         |
+    +--------------------------------+---------------------------+
+    | multiplier                     | meth, eth, prop, but      |
+    +--------------------------------+---------------------------+
+    | groupRepeater                  | di, tri, tetra            |
+    +--------------------------------+---------------------------+
+    | openBracket                    | ([{                       |
+    +--------------------------------+---------------------------+
+    | closeBracket                   | )]}                       |
+    +--------------------------------+---------------------------+
+    | locantGroup                    | (2,3), N                  |
+    +--------------------------------+---------------------------+
+    | alkAneEneYneSuffix             | ane, ene, yne, an, en, yn |
+    +--------------------------------+---------------------------+
+    | cyclicalIndicator              | cyclo                     |
+    +--------------------------------+---------------------------+
+    | functionalGroupSubstituent     | hydroxy                   |
+    +--------------------------------+---------------------------+
+    | functionalGroupMainChainSuffix | ol, oic acid              |
+    +--------------------------------+---------------------------+
+    | substituentEnd                 | yl                        |
+    +--------------------------------+---------------------------+
+    | mainChainEnd                   | N.A                       |
+    +--------------------------------+---------------------------+
+    | nameStart                      | N.A                       |
+    +--------------------------------+---------------------------+
+    | mainChainStart                 | N.A                       |
+    +--------------------------------+---------------------------+
+    | substituentStart               | N.A                       |
+    +--------------------------------+---------------------------+
+
+-------------------------------------------------------------------------------
+4.2. Token followers ~
+
+    +-----------+---------------------------------+
+    |    Key    |             Meaning             |
+    +-----------+---------------------------------+
+    | [ X | Y ] | one of X or Y                   |
+    +-----------+---------------------------------+
+    |   X -> Y  | X can be followed by Y          |
+    +-----------+---------------------------------+
+    |   X => Y  | X unpacks to (or is equal to) Y |
+    +-----------+---------------------------------+
+    
+
+    hyphen -> [ alkAneEneYneSuffix | functionalGroupMainChainSuffix | 
+                functionalGroupSubstituent | mainChainStart |
+                substituentStart | openBrackets | locantGroup | groupRepeater ] 
+
+    multiplier -> [ alkAneEneYneSuffix | hyphen ]
+
+    groupRepeater -> [ alkAneEneYneSuffix | functionalGroupSubstituent |
+                       functionalGroupMainChainSuffix | cyclicalIndicator ]
+
+    openBracket -> [ substituentStart ]
+
+    closeBracket -> [ hyphen | substituentStart ]
+
+    locantGroup -> [ hyphen ]
+
+    alkAneEneYneSuffix -> [ mainChainEnd | hyphen | substituentEnd ]
+
+    cyclicalIndicator -> [ multiplier ]
+
+    functionalGroupSubstituent -> [ hyphen | substituentEnd ]
+
+    functionalGroupMainChainSuffix -> [ hyphen |
+                                        functionalGroupMainChainSuffix |
+                                        mainChainEnd ]
+    mainChainEnd -> [  ]
+
+    substituentEnd -> [ substituentStart | mainChainStart ] 
+
+    nameStart => [ substituentStart | mainChainStart ]
+
+    substituentStart => [ openBracket | functionalGroupSubstituent | 
+                         multiplier | locantGroup | cyclicalIndicator ]
+
+    mainChainStart => [ multiplier | locantGroup | cyclicalIndicator ]
+
+-------------------------------------------------------------------------------
+4.3. Examples of parseable names ~
+
+    decan-1,10-dioic acid
+    hex-1-ene-2-yne
+    1-hexene
+    4-phenylpentane
+    2-hydroxy-3-aminohex-1-ene-5-ol
+    2-[6-(4-hydroxyhex-1-enyl)undeca-2,4-diene-7,9-diyne-1,11-diolyl]-9,8-dihydroxydodec-6-ene
+
+-------------------------------------------------------------------------------
+4.4. Example of a complex AST ~
+
+    e.g. 2-[6-(4-Hydroxyhex-1-enyl)undeca-2,4-diene-7,9-diyne-1,11-diolyl]-9,8-dihydroxydodec-6-ene
+    {
+        type: 'organicName',
+        name: '2-[6-(4-Hydroxyhex-1-enyl)undeca-2,4-diene-7,9-diyne-1,11-diolyl]dodecane',
+    
+        compoundTree: {
+            type: 'base',
+            baseType: 'alkane',
+            length: '12',
+    
+            organicGroups: [{
+                type: 'functionalGroup',
+                name: 'alkene',
+                locants: ['6']
+            }, {
+                type: 'functionalGroup',
+                name: 'alcohol',
+                locants: ['9', '8']
+            }, {
+                type: 'complexSubstituent',
+                name: '2-[6-(4-Hydroxyhex-1-en-1-yl)undeca-2,4-diene-7,9-diyne-1,11-diolyl]'
+                locants: ['2'],
+    
+                compoundTree: {
+                    type: 'base',
+                    baseType: 'alkane',
+                    length: '11',
+    
+                    organicGroups: [{
+                        type: 'functionalGroup',
+                        name: 'alkene',
+                        locants: ['2', '4']
+                    }, {
+                        type: 'functionalGroup',
+                        name: 'alkyne',
+                        locants: ['7', '9']
+                    }, {
+                        type: 'functionalGroup',
+                        name: 'alcohol',
+                        locants: ['1', '11']
+                    }, {
+                        type: 'complexSubstituent',
+                        name: '6-(4-Hydroxyhex-1-enyl)',
+                        locants: ['6'],
+    
+                        compoundTree: [{
+                            type: 'base',
+                            baseType: 'alkane',
+                            length: '6',
+                            
+                            organicGroups: [{
+                                type: 'functionalGroup',
+                                name: 'alkene',
+                                locants: ['1']
+                            }, {
+                                type: 'functionalGroup',
+                                name: 'alcohol',
+                                locants: ['4']
+                            }]
+                        }]
+                    }]
+                }
+            }]
+        }
+    }
+
+
+================================================================================
+5. Credits ~
+
+    Made by Alvin Charles
+        alvinjoycharles@gmail.com
+        https://github.com/avncharlie
+
+
+================================================================================
+6. License ~
+
+OCV is released under the MIT License.
+See: https://opensource.org/licenses/MIT

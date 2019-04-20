@@ -1,0 +1,284 @@
+<!--
+████████╗ ██████╗ ██╗  ██╗███████╗███╗   ██╗███████╗   ██╗  ██╗███╗   ███╗██╗     
+╚══██╔══╝██╔═══██╗██║ ██╔╝██╔════╝████╗  ██║██╔════╝   ╚██╗██╔╝████╗ ████║██║     
+   ██║   ██║   ██║█████╔╝ █████╗  ██╔██╗ ██║███████╗    ╚███╔╝ ██╔████╔██║██║     
+   ██║   ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╗██║╚════██║    ██╔██╗ ██║╚██╔╝██║██║     
+   ██║   ╚██████╔╝██║  ██╗███████╗██║ ╚████║███████║██╗██╔╝ ██╗██║ ╚═╝ ██║███████╗
+   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
+
+Tokens describe fragments of an organic compound's name, and the token
+definitions below describe these tokens. This file contains the token
+definitions used in OCV.
+
+With the exception of tokens that need to be unpacked (discussed later), all
+tokens contain -
+  - a regex that verifies a piece of text against the token. If a piece of text
+    matches against the regex, it is of the type of the token. A "boolean" regex
+	matches only, meaning there are no capturing groups but a "multiway" regex
+	matches with a capturing group. Boolean regexes are used when the token can
+	only have one value, e.g. a hyphen. Multiway regexes are used when the token
+	can take multiple values, such as in the case of a functional group. boolean
+	or multiway regexes must be specified in the <type> tags. Regexes can also
+	be generated through data provided in the token. In order to use this
+	feature, the nodes neading to be accessed must be present inbetween a pair
+	of "%%" in the regex. The nodes that need to be accessed must be present in
+	the form "parentNode>childNode#attribute"
+	E.g. a regex of ^(%%data>prefix%%)$ with the following node present at th
+	root of the token element:
+	<data>
+		<prefix>foo</prefix>
+		<prefix>bar</prefix>
+	</data>
+	would expand to ^(foo)$|^(bar)$
+	Another example, a regex of ^(%%data>prefix#id%%)$ with the node
+	<data>
+		<prefix id="foobar">foo</prefix>
+		<prefix id="barfoo">bar</prefix>
+	</data>
+	would expand to ^(foobar)$|^(barfoo)$
+	
+  - a list of tokens that are allowed to follow it in an organic name, present
+	in the form:
+	<followers>
+		<tokenName>Token</tokenName>
+        <tokenName>AnotherToken</tokenName>
+        <tokenName>LastToken</tokenName>
+    </followers>
+	This example would mean the tokens "Token", "AnotherToken" and "LastToken"
+	are allowed to follow the current token in an organic name.
+
+Tokens can be made of other tokens - tokens containing tokens must use the
+<unpack> starting and closing tags with <tokenName> tags inside them containing
+the names of the tokens they contain. The regexes and followers of the contained
+tokens will be combined at runtime to "unpack" the token. Tokens can be nested -
+a token definition can contain a token definition that itself contains another
+token definition. All tokens needing to be unpacked must have their regex type
+set to boolean and have their <special> set to true, meaning they won't be
+considered as a structural token and be present in a tokenised array of an
+organic name.
+-->
+
+<tokens>
+
+    <token name="hyphen">
+		<special>false</special>
+        <type>multiway</type>
+        <regex>^(-)$</regex>
+        <followers>
+            <tokenName>alkAneEneYneSuffix</tokenName>
+            <tokenName>functionalGroupMainChainSuffix</tokenName>
+            <tokenName>functionalGroupSubstituent</tokenName>
+            <tokenName>mainChainStart</tokenName>
+            <tokenName>substituentStart</tokenName>
+            <tokenName>openBrackets</tokenName>
+            <tokenName>locantGroup</tokenName>
+            <tokenName>groupRepeater</tokenName>
+        </followers>
+    </token>
+
+    <token name="multiplier">
+		<special>false</special>
+        <type>multiway</type>
+        <data>
+            <multiplier number="1"> <prefix>meth</prefix> </multiplier>
+            <multiplier number="2"> <prefix>eth</prefix> </multiplier>
+            <multiplier number="3"> <prefix>prop</prefix> </multiplier>
+            <multiplier number="4"> <prefix>but</prefix> </multiplier>
+            <multiplier number="5"> <prefix>pent</prefix> </multiplier>
+            <multiplier number="6"> <prefix>hex</prefix> </multiplier>
+            <multiplier number="7"> <prefix>hepta</prefix> </multiplier>
+            <multiplier number="8"> <prefix>octa</prefix> </multiplier>
+            <multiplier number="9"> <prefix>non</prefix> </multiplier>
+            <multiplier number="10"> <prefix>dec</prefix> </multiplier>
+            <multiplier number="11"> <prefix>undec</prefix> </multiplier>
+            <multiplier number="12"> <prefix>dodec</prefix> </multiplier>
+            <multiplier number="13"> <prefix>tridec</prefix> </multiplier>
+            <multiplier number="14"> <prefix>tetradec</prefix> </multiplier>
+            <multiplier number="15"> <prefix>pentadec</prefix> </multiplier>
+            <multiplier number="16"> <prefix>hexadec</prefix> </multiplier>
+            <multiplier number="17"> <prefix>heptadec</prefix> </multiplier>
+            <multiplier number="18"> <prefix>octadec</prefix> </multiplier>
+            <multiplier number="19"> <prefix>nonadec</prefix> </multiplier>
+            <multiplier number="20"> <prefix>icos</prefix> </multiplier>
+            <multiplier number="21"> <prefix>henicos</prefix> </multiplier>
+            <multiplier number="22"> <prefix>docos</prefix> </multiplier>
+            <multiplier number="23"> <prefix>tricos</prefix> </multiplier>
+            <multiplier number="24"> <prefix>tetracos</prefix> </multiplier>
+            <multiplier number="25"> <prefix>pentacos</prefix> </multiplier>
+        </data>
+        <regex>^(%%data>multiplier>prefix%%)$</regex>
+        <followers>
+            <tokenName>alkAneEneYneSuffix</tokenName>
+            <tokenName>hyphen</tokenName>
+        </followers>
+    </token>
+
+    <token name="groupRepeater">
+		<special>false</special>
+        <type>multiway</type>
+        <data>
+            <groupRepeater number="1"> <prefix>mono</prefix> </groupRepeater>
+            <groupRepeater number="2"> <prefix>di</prefix> </groupRepeater>
+            <groupRepeater number="3"> <prefix>tri</prefix> </groupRepeater>
+            <groupRepeater number="4"> <prefix>tetra</prefix> </groupRepeater>
+            <groupRepeater number="5"> <prefix>penta</prefix> </groupRepeater>
+            <groupRepeater number="6"> <prefix>hexa</prefix> </groupRepeater>
+            <groupRepeater number="7"> <prefix>hepta</prefix> </groupRepeater>
+            <groupRepeater number="8"> <prefix>octa</prefix> </groupRepeater>
+            <groupRepeater number="9"> <prefix>nona</prefix> </groupRepeater>
+            <groupRepeater number="10"> <prefix>deca</prefix> </groupRepeater>
+            <groupRepeater number="11"> <prefix>undeca</prefix> </groupRepeater>
+            <groupRepeater number="12"> <prefix>dodeca</prefix> </groupRepeater>
+            <groupRepeater number="13"> <prefix>trideca</prefix> </groupRepeater>
+            <groupRepeater number="14"> <prefix>tetradeca</prefix> </groupRepeater>
+            <groupRepeater number="15"> <prefix>pentadeca</prefix> </groupRepeater>
+            <groupRepeater number="16"> <prefix>hexadeca</prefix> </groupRepeater>
+            <groupRepeater number="17"> <prefix>heptadeca</prefix> </groupRepeater>
+            <groupRepeater number="18"> <prefix>octadeca</prefix> </groupRepeater>
+            <groupRepeater number="19"> <prefix>nonadeca</prefix> </groupRepeater>
+            <groupRepeater number="20"> <prefix>icosa</prefix> </groupRepeater>
+            <groupRepeater number="21"> <prefix>henicosa</prefix> </groupRepeater>
+            <groupRepeater number="22"> <prefix>docosa</prefix> </groupRepeater>
+            <groupRepeater number="23"> <prefix>tricosa</prefix> </groupRepeater>
+            <groupRepeater number="24"> <prefix>tetracosa</prefix> </groupRepeater>
+            <groupRepeater number="25"> <prefix>pentacosa</prefix> </groupRepeater>
+        </data>
+        <regex>^(%%data>groupRepeater>prefix%%)$</regex>
+        <followers>
+            <tokenName>alkAneEneYneSuffix</tokenName>
+            <tokenName>functionalGroupSubstituent</tokenName>
+            <tokenName>functionalGroupMainChainSuffix</tokenName>
+            <tokenName>cyclicalIndicator</tokenName>
+        </followers>
+    </token>
+
+    <token name="openBracket">
+		<special>false</special>
+        <type>multiway</type>
+        <regex>^([([{])$</regex>
+        <followers>
+            <tokenName>substituentStart</tokenName>
+        </followers>
+    </token>
+
+    <token name="closeBracket">
+		<special>false</special>
+        <type>multiway</type>
+	    <regex>^([)\]}])$</regex>
+        <followers>
+            <tokenName>hyphen</tokenName>
+            <tokenName>substituentStart</tokenName>
+        </followers>
+    </token>
+
+    <token name="locantGroup">
+		<special>false</special>
+        <type>multiway</type>
+        <regex>^((?:\d+|N)(?:,(?:\d+|N))*)$</regex>
+        <followers>
+            <tokenName>hyphen</tokenName>
+        </followers>
+    </token>
+
+    <token name="alkAneEneYneSuffix">
+		<special>false</special>
+        <type>multiway</type>
+        <regex>^(ane|ene|yne|an|en|yn)$</regex>
+        <followers>
+            <tokenName>mainChainEnd</tokenName>
+            <tokenName>hyphen</tokenName>
+            <tokenName>substituentEnd</tokenName>
+        </followers>
+    </token>
+
+    <token name="cyclicalIndicator">
+		<special>false</special>
+        <type>multiway</type>
+        <regex>^(cyclo)$</regex>
+        <followers>
+            <tokenName>multiplier</tokenName>
+        </followers>
+    </token>
+
+    <token name="functionalGroupSubstituent">
+		<special>false</special>
+        <type>multiway</type>
+        <data>
+            <functionalGroupSubstituent identification="hydroxy">
+                <formula>OH</formula>
+                <type>alcohol</type>
+            </functionalGroupSubstituent>
+        </data>
+        <regex>^(%%data>functionalGroupSubstituent#identification%%)$</regex>
+        <followers>
+            <tokenName>hyphen</tokenName>
+			<tokenName>substituentStart</tokenName>
+        </followers>
+    </token>
+
+    <token name="functionalGroupMainChainSuffix">
+		<special>false</special>
+        <type>multiway</type>
+        <data>
+            <functionalGroupMainChainSuffix identification="ol">
+                <formula>OH</formula>
+                <type>alcohol</type>
+            </functionalGroupMainChainSuffix>
+        </data>
+        <regex>^(%%data>functionalGroupMainChainSuffix#identification%%)$</regex>
+        <followers>
+            <tokenName>hyphen</tokenName>
+            <tokenName>functionalGroupMainChainSuffix</tokenName>
+            <tokenName>mainChainEnd</tokenName>
+        </followers>
+    </token>
+	
+	<token name="substituentEnd">
+		<special>false</special>
+        <type>multiway</type>
+		<regex>^(yl)$</regex>
+        <followers>
+            <tokenName>substituentStart</tokenName> 
+            <tokenName>mainChainStart</tokenName> 
+        </followers>
+    </token>
+	
+    <token name="mainChainEnd">
+		<special>true</special>
+        <type>boolean</type>
+        <regex>^$</regex>
+        <followers> </followers>
+    </token>
+
+    <token name="nameStart">
+		<special>true</special>
+        <type>boolean</type>
+        <unpack>
+            <tokenName>substituentStart</tokenName>
+            <tokenName>mainChainStart</tokenName>
+        </unpack>
+    </token>
+
+    <token name="mainChainStart">
+		<special>true</special>
+        <type>boolean</type>
+        <unpack>
+            <tokenName>multiplier</tokenName>
+            <tokenName>locantGroup</tokenName>
+            <tokenName>cyclicalIndicator</tokenName>
+        </unpack>
+    </token>
+
+    <token name="substituentStart">
+		<special>true</special>
+        <type>boolean</type>
+        <unpack>
+            <tokenName>openBracket</tokenName>
+            <tokenName>functionalGroupSubstituent</tokenName>
+            <tokenName>multiplier</tokenName>
+            <tokenName>locantGroup</tokenName>
+            <tokenName>cyclicalIndicator</tokenName>
+        </unpack>
+    </token>
+
+</tokens>

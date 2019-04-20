@@ -1,0 +1,109 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+OCV
+</name>
+</assembly>
+<members>
+<member name="M:WpfApplication1.Application.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="M:WpfApplication1.Application.Main">
+	<summary>
+Application Entry Point.
+</summary>
+</member><member name="T:WpfApplication1.Application">
+	<summary>
+Application
+</summary>
+</member><member name="M:WpfApplication1.MainWindow.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.MainWindow">
+	<summary>
+MainWindow
+</summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+	<summary>
+ Returns the application object for the running application
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+	<summary>
+ Returns information about the host computer.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+	<summary>
+ Returns information for the current user.  If you wish to run the application with the current 
+ Windows user credentials, call My.User.InitializeWithWindowsUser().
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+	<summary>
+ Returns the application log. The listeners can be configured by the application's configuration file.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+	<summary>
+ Returns the collection of Windows defined in the project.
+ </summary>
+</member><member name="T:WpfApplication1.My.MyWpfExtension">
+	<summary>
+ Module used to define the properties that are available in the My Namespace for WPF
+ </summary>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:WpfApplication1.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:WpfApplication1.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Sets the placeholder text 'Enter IUPAC name' to the user input textbox (textBox_userInput) when it loses focus. Also makes the text italic and gray.
+ </summary>
+	<param name="sender">TextBox - sent automatically</param>
+	<param name="e">System.Windows.RoutedEventArgs - sent automatically</param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.MainWindow.textBox_userInput_removePlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Removes the placeholder text and all styling from it for normal use when clicked on by user.
+ </summary>
+	<param name="sender">TextBox - sent automatically</param>
+	<param name="e">System.Windows.RoutedEventArgs - sent automatically</param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.parseIUPACName.createTokenDefinition(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
+	<summary>
+ Given a singular token definition as an XML node and all the token definitions in XML format, return a TokenDefinition
+ structure representing the token definition. Handles unpacking regexes and expanding contained tokens within other tokens
+ recursively.
+ </summary>
+	<param name="tokenDefinitionXML">An XElement containing the token definition to be converted</param>
+	<param name="allTokenDefinitionsXML">An XElement containing all token definitions (used when tokenDefinitionXML contains other tokens)</param>
+	<returns>Returns a TokenDefinition representing tokenDefinitionXML</returns>
+	<remarks>Works for recursive definitions and expanded regexes.</remarks>
+</member><member name="M:WpfApplication1.parseIUPACName.createTokenDefinitons(System.Xml.Linq.XElement)">
+	<summary>
+ Given a XElement containing all token definitions in XML format, return an array of TokenDefinitions detailing given tokens.
+ </summary>
+	<param name="allTokenDefinitionsXML">An XElement containing all tokens to be converted into a TokenDefinitions</param>
+	<returns>An array of TokenDefinitions</returns>
+	<remarks>Uses the createTokenDefinition function to create singular TokenDefinitions</remarks>
+</member><member name="M:WpfApplication1.parseIUPACName.tokenise(System.String,WpfApplication1.parseIUPACName.TokenDefinition[])">
+	<summary>
+ Given an organicName and a tokenDefinition list, tokenise it, meaning convert the organic name into an array of Token structures.
+ </summary>
+	<param name="organicName">A string containing the organicName to be tokenised</param>
+	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
+	<returns>A list of Token structures representing the organic name.</returns>
+	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
+</member>
+</members>
+</doc>
