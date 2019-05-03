@@ -47,6 +47,9 @@ tokens contain -
 	This example would mean the tokens "Token", "AnotherToken" and "LastToken"
 	are allowed to follow the current token in an organic name.
 
+The nameStart token is a special token - this token must unpack to the tokens
+that an organic name is allowed to start with.
+
 Tokens can be made of other tokens - tokens containing tokens must use the
 <unpack> starting and closing tags with <tokenName> tags inside them containing
 the names of the tokens they contain. The regexes and followers of the contained
@@ -61,7 +64,7 @@ organic name.
 <tokens>
 
     <token name="hyphen">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <regex>^(-)$</regex>
         <followers>
@@ -77,7 +80,7 @@ organic name.
     </token>
 
     <token name="multiplier">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <data>
             <multiplier number="1"> <prefix>meth</prefix> </multiplier>
@@ -86,7 +89,7 @@ organic name.
             <multiplier number="4"> <prefix>but</prefix> </multiplier>
             <multiplier number="5"> <prefix>pent</prefix> </multiplier>
             <multiplier number="6"> <prefix>hex</prefix> </multiplier>
-            <multiplier number="7"> <prefix>hepta</prefix> </multiplier>
+            <multiplier number="7"> <prefix>hept</prefix> </multiplier>
             <multiplier number="8"> <prefix>octa</prefix> </multiplier>
             <multiplier number="9"> <prefix>non</prefix> </multiplier>
             <multiplier number="10"> <prefix>dec</prefix> </multiplier>
@@ -108,13 +111,14 @@ organic name.
         </data>
         <regex>^(%%data>multiplier>prefix%%)$</regex>
         <followers>
+            <tokenName>substituentEnd</tokenName>
             <tokenName>alkAneEneYneSuffix</tokenName>
             <tokenName>hyphen</tokenName>
         </followers>
     </token>
 
     <token name="groupRepeater">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <data>
             <groupRepeater number="1"> <prefix>mono</prefix> </groupRepeater>
@@ -124,24 +128,6 @@ organic name.
             <groupRepeater number="5"> <prefix>penta</prefix> </groupRepeater>
             <groupRepeater number="6"> <prefix>hexa</prefix> </groupRepeater>
             <groupRepeater number="7"> <prefix>hepta</prefix> </groupRepeater>
-            <groupRepeater number="8"> <prefix>octa</prefix> </groupRepeater>
-            <groupRepeater number="9"> <prefix>nona</prefix> </groupRepeater>
-            <groupRepeater number="10"> <prefix>deca</prefix> </groupRepeater>
-            <groupRepeater number="11"> <prefix>undeca</prefix> </groupRepeater>
-            <groupRepeater number="12"> <prefix>dodeca</prefix> </groupRepeater>
-            <groupRepeater number="13"> <prefix>trideca</prefix> </groupRepeater>
-            <groupRepeater number="14"> <prefix>tetradeca</prefix> </groupRepeater>
-            <groupRepeater number="15"> <prefix>pentadeca</prefix> </groupRepeater>
-            <groupRepeater number="16"> <prefix>hexadeca</prefix> </groupRepeater>
-            <groupRepeater number="17"> <prefix>heptadeca</prefix> </groupRepeater>
-            <groupRepeater number="18"> <prefix>octadeca</prefix> </groupRepeater>
-            <groupRepeater number="19"> <prefix>nonadeca</prefix> </groupRepeater>
-            <groupRepeater number="20"> <prefix>icosa</prefix> </groupRepeater>
-            <groupRepeater number="21"> <prefix>henicosa</prefix> </groupRepeater>
-            <groupRepeater number="22"> <prefix>docosa</prefix> </groupRepeater>
-            <groupRepeater number="23"> <prefix>tricosa</prefix> </groupRepeater>
-            <groupRepeater number="24"> <prefix>tetracosa</prefix> </groupRepeater>
-            <groupRepeater number="25"> <prefix>pentacosa</prefix> </groupRepeater>
         </data>
         <regex>^(%%data>groupRepeater>prefix%%)$</regex>
         <followers>
@@ -153,7 +139,7 @@ organic name.
     </token>
 
     <token name="openBracket">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <regex>^([([{])$</regex>
         <followers>
@@ -162,9 +148,9 @@ organic name.
     </token>
 
     <token name="closeBracket">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
-	    <regex>^([)\]}])$</regex>
+        <regex>^([)\]}])$</regex>
         <followers>
             <tokenName>hyphen</tokenName>
             <tokenName>substituentStart</tokenName>
@@ -172,7 +158,7 @@ organic name.
     </token>
 
     <token name="locantGroup">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <regex>^((?:\d+|N)(?:,(?:\d+|N))*)$</regex>
         <followers>
@@ -181,7 +167,7 @@ organic name.
     </token>
 
     <token name="alkAneEneYneSuffix">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <regex>^(ane|ene|yne|an|en|yn)$</regex>
         <followers>
@@ -192,7 +178,7 @@ organic name.
     </token>
 
     <token name="cyclicalIndicator">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <regex>^(cyclo)$</regex>
         <followers>
@@ -201,45 +187,102 @@ organic name.
     </token>
 
     <token name="functionalGroupSubstituent">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <data>
+          
+            <functionalGroupSubstituent identification="carboxy">
+                <formula>todo</formula>
+                <type>carboxylic acid</type>
+            </functionalGroupSubstituent>
+
+            <functionalGroupSubstituent identification="oxo">
+                <formula>todo</formula>
+                <type>ketone</type>
+            </functionalGroupSubstituent>
+
             <functionalGroupSubstituent identification="hydroxy">
-                <formula>OH</formula>
+                <formula>todo</formula>
                 <type>alcohol</type>
             </functionalGroupSubstituent>
+          
+            <functionalGroupSubstituent identification="amino">
+                <formula>todo</formula>
+                <type>amine</type>
+            </functionalGroupSubstituent>
+          
+            <functionalGroupSubstituent identification="phenyl">
+                <formula>todo</formula>
+                <type>benzene</type>
+            </functionalGroupSubstituent>
+
+            <functionalGroupSubstituent identification="nitro">
+                <formula>todo</formula>
+                <type>nitro</type>
+            </functionalGroupSubstituent>
+          
         </data>
         <regex>^(%%data>functionalGroupSubstituent#identification%%)$</regex>
         <followers>
             <tokenName>hyphen</tokenName>
-			<tokenName>substituentStart</tokenName>
+			      <tokenName>substituentStart</tokenName>
+            <tokenName>closeBracket</tokenName>
         </followers>
     </token>
 
     <token name="functionalGroupMainChainSuffix">
-		<special>false</special>
+        <special>false</special>
         <type>multiway</type>
         <data>
-            <functionalGroupMainChainSuffix identification="ol">
-                <formula>OH</formula>
-                <type>alcohol</type>
+          
+            <functionalGroupMainChainSuffix identification="oic acid">
+                <formula>todo</formula>
+                <type>carboxylic acid</type>
+                <mustBeEnding>true</mustBeEnding>
             </functionalGroupMainChainSuffix>
+          
+            <functionalGroupMainChainSuffix identification="al">
+                <formula>todo</formula>
+                <type>aldehyde</type>
+                <mustBeEnding>true</mustBeEnding>
+            </functionalGroupMainChainSuffix>
+          
+            <functionalGroupMainChainSuffix identification="one">
+                <formula>todo</formula>
+                <type>ketone</type>
+                <mustBeEnding>false</mustBeEnding>
+            </functionalGroupMainChainSuffix>       
+          
+            <functionalGroupMainChainSuffix identification="ol">
+                <formula>todo</formula>
+                <type>alcohol</type>
+                <mustBeEnding>false</mustBeEnding>
+            </functionalGroupMainChainSuffix>
+          
+            <functionalGroupMainChainSuffix identification="amine">
+                <formula>todo</formula>
+                <type>amine</type>
+                <mustBeEnding>false</mustBeEnding>
+            </functionalGroupMainChainSuffix>
+          
         </data>
         <regex>^(%%data>functionalGroupMainChainSuffix#identification%%)$</regex>
         <followers>
             <tokenName>hyphen</tokenName>
             <tokenName>functionalGroupMainChainSuffix</tokenName>
             <tokenName>mainChainEnd</tokenName>
+            <tokenName>closeBracket</tokenName>
         </followers>
     </token>
 	
-	<token name="substituentEnd">
-		<special>false</special>
+    <token name="substituentEnd">
+        <special>false</special>
         <type>multiway</type>
-		<regex>^(yl)$</regex>
+        <regex>^(yl)$</regex>
         <followers>
             <tokenName>substituentStart</tokenName> 
-            <tokenName>mainChainStart</tokenName> 
+            <tokenName>mainChainStart</tokenName>
+            <tokenName>closeBracket</tokenName>
         </followers>
     </token>
 	
@@ -251,7 +294,7 @@ organic name.
     </token>
 
     <token name="nameStart">
-		<special>true</special>
+        <special>true</special>
         <type>boolean</type>
         <unpack>
             <tokenName>substituentStart</tokenName>
@@ -260,7 +303,7 @@ organic name.
     </token>
 
     <token name="mainChainStart">
-		<special>true</special>
+        <special>true</special>
         <type>boolean</type>
         <unpack>
             <tokenName>multiplier</tokenName>
@@ -270,7 +313,7 @@ organic name.
     </token>
 
     <token name="substituentStart">
-		<special>true</special>
+        <special>true</special>
         <type>boolean</type>
         <unpack>
             <tokenName>openBracket</tokenName>

@@ -5,18 +5,34 @@
     End Sub
 
     Private Sub testParsing(ByVal nameToTest As String)
-        ' load token definitions from token definitions Xml file
+        ' load token definitions from token definitions XML file and create token definition list
         Dim tokenDefinitionsXML As XElement
+        Dim tokenDefinitions As IUPACParser.TokenDefinition()
         tokenDefinitionsXML = XElement.Load(OCVresources.tokenDefinitionsFile)
-
-        ' create token definition list
-        Dim tokenDefinitions As parseIUPACName.TokenDefinition()
-        tokenDefinitions = parseIUPACName.createTokenDefinitons(tokenDefinitionsXML)
+        tokenDefinitions = IUPACParser.generateTokenDefinitions(tokenDefinitionsXML)
 
         ' tokenise example name
-        Console.WriteLine("parsing " & nameToTest)
-        Console.WriteLine()
-        Dim result = parseIUPACName.tokenise(nameToTest, tokenDefinitions)
+        Console.WriteLine("tokenising " & nameToTest)
+        Dim tokens As Token()
+        tokens = IUPACParser.generateTokens(nameToTest, tokenDefinitions)
+
+        ' display error if there is one
+        If tokens(0).type = "ERROR" Then
+            Console.WriteLine(tokens(0).value)
+        Else
+            ' convert tokens to AST
+            Console.WriteLine("generating AST for " & nameToTest)
+            Dim AST As IUPACParser.ASTRoot
+            AST = IUPACParser.generateAST(nameToTest, tokens, tokenDefinitions)
+
+            If AST.compoundTree.isError Then
+                Console.WriteLine(AST.compoundTree.errorMessage)
+            End If
+
+            Console.WriteLine()
+        End If
+
+
     End Sub
 
     ''' <summary>

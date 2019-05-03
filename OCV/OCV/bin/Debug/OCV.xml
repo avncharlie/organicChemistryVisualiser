@@ -6,104 +6,152 @@ OCV
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.Application.InitializeComponent">
+<member name="M:OrganicChemistryVisualiser.Application.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="M:WpfApplication1.Application.Main">
+</member><member name="M:OrganicChemistryVisualiser.Application.Main">
 	<summary>
 Application Entry Point.
 </summary>
-</member><member name="T:WpfApplication1.Application">
+</member><member name="T:OrganicChemistryVisualiser.Application">
 	<summary>
 Application
 </summary>
-</member><member name="M:WpfApplication1.MainWindow.InitializeComponent">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.MainWindow">
+</member><member name="T:OrganicChemistryVisualiser.MainWindow">
 	<summary>
 MainWindow
 </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateASTAlkaneBase(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],System.Boolean,System.String[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[]@)">
+	<summary>
+ Given a the name of an organic compound or substituent fragment, an array of tokens representing this name, an array of 
+ token definitions, an indication if the given name contains the main chain of the compound and the locants of the chain
+ if it isn't, return an ASTAlkaneBase structure representing this object. Deals with nested main chains (complex substituents)
+ recursively.
+ </summary>
+	<param name="organicNameString">
+ A string containing the name of the organic compound (used in error messages). In the case of a complex substituent, the
+ complex substituent fragment is expected (e.g but-1-enyl)
+ </param>
+	<param name="nameTokens">An array of Token objects representing the name to be parsed</param>
+	<param name="isMainChain">A boolean that is true if the given name contains the main chain, false if not</param>
+	<param name="locants">
+ An array containing the locants of the given complex substituent if not isMainChain
+ e.g. for 2-butyl, locants = {2}
+ If isMainChain, empty list should be given (e.g. {})
+ </param>
+	<param name="tokenDefinitions">An array of (generated) TokenDefinitions</param>
+	<returns>
+ If valid name, return an ASTAlkaneBase structure representing name
+ If invalid name, return an ASTAlkaneBase structure with the isError boolean flag set as True with a generated error message
+ present in the errorMessage variable
+ </returns>
+	<remarks>Should be called by the generateAST function, not by the user</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateAST(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[])">
+	<summary>
+ Generates an Abstract Syntax Tree in the format of an ASTRoot structure for a given organicCompound
+ </summary>
+	<param name="organicNameString">A string containing the name of the compound to be parsed</param>
+	<param name="organicNameTokens">
+ An array of Token structures representing the compound to be parsed. Can be generated with the generateTokens 
+ function in this module.
+ </param>
+	<param name="tokenDefinitions">
+ An array of TokenDefinition structures representing the definitions of tokens present in the organicNameTokens array.
+ Can be generated with the generateTokenDefinitions function in this module.
+ </param>
+	<returns>
+ Returns an ASTRoot structure representing the organicCompound. If the name is invalid, compoundTree.isError will be 
+ true and compoundTree.errorMessage will contain the error message.
+ </returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokenDefinition(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
+	<summary>
+ Given a singular token definition as an XML node and all the token definitions in XML format, return a TokenDefinition
+ structure representing the token definition. Handles unpacking regexes and expanding contained tokens within other tokens
+ recursively.
+ For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
+ </summary>
+	<param name="tokenDefinitionXML">An XElement containing the token definition to be converted</param>
+	<param name="allTokenDefinitionsXML">An XElement containing all token definitions (used when tokenDefinitionXML contains other tokens)</param>
+	<returns>Returns a TokenDefinition representing tokenDefinitionXML</returns>
+	<remarks>Works for recursive definitions and expanded regexes.</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokenDefinitions(System.Xml.Linq.XElement)">
+	<summary>
+ Given a XElement containing all token definitions in XML format, return an array of TokenDefinitions detailing given tokens.
+ For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
+ </summary>
+	<param name="allTokenDefinitionsXML">An XElement containing all tokens to be converted into a TokenDefinitions</param>
+	<returns>An array of TokenDefinitions</returns>
+	<remarks>Uses the createTokenDefinition function to create singular TokenDefinitions</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokens(System.String,OrganicChemistryVisualiser.IUPACParser.TokenDefinition[])">
+	<summary>
+ Given an organicName and a tokenDefinition list, tokenise it, meaning convert the organic name into an array of Token structures.
+ The token array is then verified. If any error is encountered, returns the error in the form of an array of a single Token where
+ type="ERROR" and value contains the error details.
+ For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
+ </summary>
+	<param name="organicName">A string containing the organicName to be tokenised</param>
+	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
+	<returns>An array of Token structures representing the organic name OR an array containing a single token whose type is ERROR and value contains an error message.</returns>
+	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
+</member><member name="P:OrganicChemistryVisualiser.My.MyWpfExtension.Application">
 	<summary>
  Returns the application object for the running application
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+</member><member name="P:OrganicChemistryVisualiser.My.MyWpfExtension.Computer">
 	<summary>
  Returns information about the host computer.
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+</member><member name="P:OrganicChemistryVisualiser.My.MyWpfExtension.User">
 	<summary>
  Returns information for the current user.  If you wish to run the application with the current 
  Windows user credentials, call My.User.InitializeWithWindowsUser().
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+</member><member name="P:OrganicChemistryVisualiser.My.MyWpfExtension.Log">
 	<summary>
  Returns the application log. The listeners can be configured by the application's configuration file.
  </summary>
-</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+</member><member name="P:OrganicChemistryVisualiser.My.MyWpfExtension.Windows">
 	<summary>
  Returns the collection of Windows defined in the project.
  </summary>
-</member><member name="T:WpfApplication1.My.MyWpfExtension">
+</member><member name="T:OrganicChemistryVisualiser.My.MyWpfExtension">
 	<summary>
  Module used to define the properties that are available in the My Namespace for WPF
  </summary>
 	<remarks></remarks>
-</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.Culture">
 	<summary>
   Overrides the current thread's CurrentUICulture property for all
   resource lookups using this strongly typed resource class.
 </summary>
-</member><member name="T:WpfApplication1.My.Resources.Resources">
+</member><member name="T:OrganicChemistryVisualiser.My.Resources.Resources">
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
-</member><member name="M:WpfApplication1.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Sets the placeholder text 'Enter IUPAC name' to the user input textbox (textBox_userInput) when it loses focus. Also makes the text italic and gray.
  </summary>
 	<param name="sender">TextBox - sent automatically</param>
 	<param name="e">System.Windows.RoutedEventArgs - sent automatically</param>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.MainWindow.textBox_userInput_removePlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_removePlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Removes the placeholder text and all styling from it for normal use when clicked on by user.
  </summary>
 	<param name="sender">TextBox - sent automatically</param>
 	<param name="e">System.Windows.RoutedEventArgs - sent automatically</param>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.parseIUPACName.createTokenDefinition(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
-	<summary>
- Given a singular token definition as an XML node and all the token definitions in XML format, return a TokenDefinition
- structure representing the token definition. Handles unpacking regexes and expanding contained tokens within other tokens
- recursively.
- </summary>
-	<param name="tokenDefinitionXML">An XElement containing the token definition to be converted</param>
-	<param name="allTokenDefinitionsXML">An XElement containing all token definitions (used when tokenDefinitionXML contains other tokens)</param>
-	<returns>Returns a TokenDefinition representing tokenDefinitionXML</returns>
-	<remarks>Works for recursive definitions and expanded regexes.</remarks>
-</member><member name="M:WpfApplication1.parseIUPACName.createTokenDefinitons(System.Xml.Linq.XElement)">
-	<summary>
- Given a XElement containing all token definitions in XML format, return an array of TokenDefinitions detailing given tokens.
- </summary>
-	<param name="allTokenDefinitionsXML">An XElement containing all tokens to be converted into a TokenDefinitions</param>
-	<returns>An array of TokenDefinitions</returns>
-	<remarks>Uses the createTokenDefinition function to create singular TokenDefinitions</remarks>
-</member><member name="M:WpfApplication1.parseIUPACName.tokenise(System.String,WpfApplication1.parseIUPACName.TokenDefinition[])">
-	<summary>
- Given an organicName and a tokenDefinition list, tokenise it, meaning convert the organic name into an array of Token structures.
- </summary>
-	<param name="organicName">A string containing the organicName to be tokenised</param>
-	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
-	<returns>A list of Token structures representing the organic name.</returns>
-	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
 </member>
 </members>
 </doc>
