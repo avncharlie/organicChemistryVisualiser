@@ -99,6 +99,19 @@ MainWindow
 	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
 	<returns>An array of Token structures representing the organic name OR an array containing a single token whose type is ERROR and value contains an error message.</returns>
 	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:OrganicChemistryVisualiser.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member><member name="P:OrganicChemistryVisualiser.My.MyWpfExtension.Application">
 	<summary>
  Returns the application object for the running application
@@ -125,19 +138,6 @@ MainWindow
  Module used to define the properties that are available in the My Namespace for WPF
  </summary>
 	<remarks></remarks>
-</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:OrganicChemistryVisualiser.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Sets the placeholder text 'Enter IUPAC name' to the user input textbox (textBox_userInput) when it loses focus. Also makes the text italic and gray.

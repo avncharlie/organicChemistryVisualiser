@@ -635,11 +635,11 @@ Module IUPACParser
         Dim newComplexSubstituentString As String
 
         Dim moveCounter As Boolean
-        moveCounter = False
+        moveCounter = True
 
         ' reset counter and locantGroupIndex
         locantGroupIndex = -1
-        counter = 0
+        counter = -1
         While counter < substituentTokens.Length - 1
             If moveCounter Then
                 moveCounter = False
@@ -664,7 +664,7 @@ Module IUPACParser
                 End If
             Else
                 If substituentTokens(counter).type <> "locantGroup" Then
-                    If substituentTokens(counter - 1).type <> "hyphen" Then
+                    If (counter - 1 < substituentTokens.Length - 1 And counter - 1 > 0) AndAlso substituentTokens(counter - 1).type <> "hyphen" Then
                         errorPointer = ""
                         For tCounter = 0 To counter - 1
                             For tokenChars = 0 To substituentTokens(tCounter).value.Length - 1
