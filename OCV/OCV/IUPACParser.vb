@@ -1255,6 +1255,17 @@ Module IUPACParser
         ' stores the current token definition that possibleToken is being checked against
         Dim currentTokenDef As TokenDefinition
 
+        ' special case - error empty name
+        If organicName = "" Then
+            Dim errorToken As Token
+            errorToken.type = "ERROR"
+            errorToken.value = "the name """ & organicName & """ is not valid" & Environment.NewLine _
+                & organicName & Environment.NewLine _
+                & "^" & Environment.NewLine _
+                & """"" is not valid (no matching tokens)"
+            Return {errorToken}
+        End If
+
         Dim regexTest As Regex
         Dim match As Match
 
