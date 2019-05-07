@@ -90,7 +90,7 @@ organic name.
             <multiplier number="5"> <prefix>pent</prefix> </multiplier>
             <multiplier number="6"> <prefix>hex</prefix> </multiplier>
             <multiplier number="7"> <prefix>hept</prefix> </multiplier>
-            <multiplier number="8"> <prefix>octa</prefix> </multiplier>
+            <multiplier number="8"> <prefix>oct</prefix> </multiplier>
             <multiplier number="9"> <prefix>non</prefix> </multiplier>
             <multiplier number="10"> <prefix>dec</prefix> </multiplier>
             <multiplier number="11"> <prefix>undec</prefix> </multiplier>
@@ -128,6 +128,24 @@ organic name.
             <groupRepeater number="5"> <prefix>penta</prefix> </groupRepeater>
             <groupRepeater number="6"> <prefix>hexa</prefix> </groupRepeater>
             <groupRepeater number="7"> <prefix>hepta</prefix> </groupRepeater>
+            <groupRepeater number="8"> <prefix>octa</prefix> </groupRepeater>
+            <groupRepeater number="9"> <prefix>nona</prefix> </groupRepeater>
+            <groupRepeater number="10"> <prefix>deac</prefix> </groupRepeater>
+            <groupRepeater number="11"> <prefix>undeca</prefix> </groupRepeater>
+            <groupRepeater number="12"> <prefix>dodeca</prefix> </groupRepeater>
+            <groupRepeater number="13"> <prefix>trideca</prefix> </groupRepeater>
+            <groupRepeater number="14"> <prefix>tetradeca</prefix> </groupRepeater>
+            <groupRepeater number="15"> <prefix>pentadeca</prefix> </groupRepeater>
+            <groupRepeater number="16"> <prefix>hexadeca</prefix> </groupRepeater>
+            <groupRepeater number="17"> <prefix>heptadeca</prefix> </groupRepeater>
+            <groupRepeater number="18"> <prefix>octadeca</prefix> </groupRepeater>
+            <groupRepeater number="19"> <prefix>nonadeca</prefix> </groupRepeater>
+            <groupRepeater number="20"> <prefix>icosa</prefix> </groupRepeater>
+            <groupRepeater number="21"> <prefix>henicosa</prefix> </groupRepeater>
+            <groupRepeater number="22"> <prefix>docosa</prefix> </groupRepeater>
+            <groupRepeater number="23"> <prefix>tricosa</prefix> </groupRepeater>
+            <groupRepeater number="24"> <prefix>tetracosa</prefix> </groupRepeater>
+            <groupRepeater number="25"> <prefix>pentacosa</prefix> </groupRepeater>
         </data>
         <regex>^(%%data>groupRepeater>prefix%%)$</regex>
         <followers>
@@ -160,7 +178,7 @@ organic name.
     <token name="locantGroup">
         <special>false</special>
         <type>multiway</type>
-        <regex>^((?:\d+|N)(?:,(?:\d+|N))*)$</regex>
+        <regex>^((?:\d+)(?:,(?:\d+))*)$</regex>
         <followers>
             <tokenName>hyphen</tokenName>
         </followers>

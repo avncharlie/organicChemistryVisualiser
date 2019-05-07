@@ -6,7 +6,6 @@
     ResizeMode="CanResize" 
     Height="500" Width="742" MinHeight="300" MinWidth="500">
     
-    
     <Window.Resources>
     </Window.Resources>
     
@@ -67,9 +66,15 @@
             <Rectangle HorizontalAlignment="Stretch" Fill="Black" Height="1"/>
         </DockPanel>
         
-        <!-- canvas stub -->
+        <!-- picture output (canvas used as container as controls can overlap) -->
         <DockPanel Grid.Column="0" Grid.Row="3">
-            <TextBlock FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Left side</TextBlock>
+            <Canvas Name="c_containerDisplay">
+                <!-- error textblock -->
+                <TextBlock Name="tb_error"
+                           Canvas.ZIndex="1" Margin="25"
+                           Foreground="red"
+                           FontFamily="Courier New"></TextBlock>
+            </Canvas>
         </DockPanel>
 
         <!-- resizer -->

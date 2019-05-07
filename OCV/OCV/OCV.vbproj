@@ -98,6 +98,7 @@
     <Import Include="System.Windows.Navigation" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IUPACRenderer.vb" />
     <Compile Include="OCVresources.vb" />
     <Compile Include="IUPACParser.vb" />
     <Compile Include="My Project\AssemblyInfo.vb">

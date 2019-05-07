@@ -99,6 +99,15 @@ MainWindow
 	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
 	<returns>An array of Token structures representing the organic name OR an array containing a single token whose type is ERROR and value contains an error message.</returns>
 	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.exportCanvasAsImage(System.Windows.Controls.Canvas,System.String,System.String)">
+	<summary>
+ Given a canvas element, a filetype of either png or jpg, and a file pat, export it as an image
+ Can be used with a rendered AST canvas to export a rendered organicCompound
+ </summary>
+	<param name="canvas">The canvas to be rendered</param>
+	<param name="fileType">A string containing either 'png' or 'jpg' signifying whether the image should be exported in PNG or JPEG format</param>
+	<param name="filePath">The path the image should be exported to. Existing images with the same name will be overwritten</param>
+	<remarks></remarks>
 </member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
@@ -138,6 +147,13 @@ MainWindow
  Module used to define the properties that are available in the My Namespace for WPF
  </summary>
 	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.parseAndDisplay(System.String)">
+	<summary>
+ Given an organicName, uses the functions and subroutines present in IUPACParser and IUPACRenderer to display either an error for an incorrect name
+ or a rendered picture of the compound
+ </summary>
+	<param name="organicName">A string containing the name to be rendered</param>
+	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Sets the placeholder text 'Enter IUPAC name' to the user input textbox (textBox_userInput) when it loses focus. Also makes the text italic and gray.
@@ -151,6 +167,13 @@ MainWindow
  </summary>
 	<param name="sender">TextBox - sent automatically</param>
 	<param name="e">System.Windows.RoutedEventArgs - sent automatically</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_KeyDown(System.Object,System.Windows.Input.KeyEventArgs)">
+	<summary>
+ When a name is entered to textBox_userInput and the user presses enter, this subroutine calls parseAndDisplay with the entered name
+ </summary>
+	<param name="sender">Handled by system - will be textBox_userInput</param>
+	<param name="e">Handled by system - will a System.Windows.Input.KeyEventArgs with the key a user entered (keys that are not enter are ignored)</param>
 	<remarks></remarks>
 </member>
 </members>

@@ -48,6 +48,7 @@ Module IUPACParser
     ' todo:
     '   check for valid functionalGroupMainChainSuffix order (e.g. -oic acid or -al should be last, -ene before -yne, etc)
     '   big try catch for errors in AST function
+    '   error on cycloethane and cyclomethane
 
 
     ''' <summary>
@@ -410,7 +411,7 @@ Module IUPACParser
                                 locantOffset = 0
                                 ' check that locants are within lengths of main chain
                                 For locantIndex = 0 To locantGroupArray.Length - 1
-                                    If CType(locantGroupArray(locantIndex), Integer) > alkaneBase.length - 1 Or CType(locantGroupArray(locantIndex), Integer) < 1 Then
+                                    If (CType(locantGroupArray(locantIndex), Integer) > alkaneBase.length - 1 Or CType(locantGroupArray(locantIndex), Integer) < 1) And Not (CType(locantGroupArray(locantIndex), Integer) = alkaneBase.length And alkaneBase.isCyclical) Then
                                         errorPointer = ""
                                         For tCounter = 0 To locantGroupIndex - 1
                                             For tokenChars = 0 To mainChainTokens(tCounter).value.Length - 1
@@ -459,7 +460,7 @@ Module IUPACParser
                                 locantOffset = 0
                                 ' check that locants are within lengths of main chain
                                 For locantIndex = 0 To locantGroupArray.Length - 1
-                                    If CType(locantGroupArray(locantIndex), Integer) > alkaneBase.length - 1 Or CType(locantGroupArray(locantIndex), Integer) < 1 Then
+                                    If (CType(locantGroupArray(locantIndex), Integer) > alkaneBase.length - 1 Or CType(locantGroupArray(locantIndex), Integer) < 1) And Not (CType(locantGroupArray(locantIndex), Integer) = alkaneBase.length And alkaneBase.isCyclical) Then
                                         errorPointer = ""
                                         For tCounter = 0 To locantGroupIndex - 1
                                             For tokenChars = 0 To mainChainTokens(tCounter).value.Length - 1
@@ -1308,7 +1309,7 @@ Module IUPACParser
                                 ' e.g. in pentane, pentan-1-oic acid, pentanyl, pent is a multiplier
                                 ' e.g. but in pentanitro, penta is a groupRepeater
                                 ' otherwise tokeniser will tokenise it as a groupRepeater. E.g. pentane -> pent (multiplier) -> penta (groupRepeater) -> ERROR - unkown token "ne"
-                                If index + 3 < organicName.Length - 1 AndAlso (organicName(index + 1) = "a" And organicName(index + 2) = "n" And (organicName(index + 3) = "e" Or organicName(index + 3) = "-" Or organicName(index + 3) = "y")) Then
+                                If index + 3 < organicName.Length AndAlso (organicName(index + 1) = "a" And organicName(index + 2) = "n" And (organicName(index + 3) = "e" Or organicName(index + 3) = "-" Or organicName(index + 3) = "y")) Then
                                     ' skipping to end 
                                     index = organicName.Length - 1
                                 End If
