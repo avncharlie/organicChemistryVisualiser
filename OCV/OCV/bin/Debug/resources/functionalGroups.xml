@@ -1,0 +1,123 @@
+<functionalGroups>
+  <functionalGroup type="_branch">
+    <child>
+      <representor></representor>
+      <bondType>1</bondType>
+      <colour>#ffffff</colour>
+    </child>
+  </functionalGroup>
+  
+  <functionalGroup type="fluoro">
+    <child>
+      <representor>F</representor>
+      <bondType>1</bondType>
+      <colour>#0ea528</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="chloro">
+    <child>
+      <representor>Cl</representor>
+      <bondType>1</bondType>
+      <colour>#0f518c</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="bromo">
+    <child>
+      <representor>Br</representor>
+      <bondType>1</bondType>
+      <colour>#8e762a</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="iodo">
+    <child>
+      <representor>I</representor>
+      <bondType>1</bondType>
+      <colour>#c621ef</colour>
+    </child>
+  </functionalGroup>
+  
+  <functionalGroup type="carboxylic acid">
+    <child>
+      <representor> O </representor>
+      <bondType>2</bondType>
+      <colour>#ff0000</colour>
+    </child>
+    <child>
+      <representor>OH</representor>
+      <bondType>1</bondType>
+      <colour>#ff0000</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="cyclical carboxylic acid">
+    <child>
+      <representor></representor>
+      <bondType>1</bondType>
+      <colour>#ff0000</colour>
+      <child>
+        <representor> O </representor>
+        <bondType>2</bondType>
+        <colour>#ff0000</colour>
+      </child>
+      <child>
+        <representor>OH</representor>
+        <bondType>1</bondType>
+        <colour>#ff0000</colour>
+      </child>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="aldehyde">
+    <child>
+      <representor> O </representor>
+      <bondType>2</bondType>
+      <colour>#ff0000</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="ketone">
+    <child>
+      <representor> O </representor>
+      <bondType>2</bondType>
+      <colour>#ff0000</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="alcohol">
+    <child>
+      <representor>OH</representor>
+      <bondType>1</bondType>
+      <colour>#ff0000</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="amine">
+    <child>
+      <representor>NH₂</representor>
+      <bondType>1</bondType>
+      <colour>#ff0000</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="nitro">
+    <child>
+      <representor> N⁺ </representor>
+      <bondType>1</bondType>
+      <colour>#0000ff</colour>
+      <child>
+        <representor> O</representor>
+        <bondType>2</bondType>
+        <colour>#ff0000</colour>
+      </child>
+      <child>
+        <representor> O⁻ </representor>
+        <bondType>1</bondType>
+        <colour>#ff0000</colour>
+      </child>
+    </child>
+  </functionalGroup>
+
+</functionalGroups>

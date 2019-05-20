@@ -1,11 +1,19 @@
 ﻿Class MainWindow 
     Dim c_display As New Canvas
+    Dim tokenDefinitions As IUPACParser.TokenDefinition()
+    Dim functionalGroupDefinitions As IUPACParser.FunctionalGroupDefinition()
 
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         ' set starting element to be something (stub)
         textBox_userInput.FontStyle = FontStyles.Normal
         textBox_userInput.Foreground = New SolidColorBrush(Colors.Black)
-        textBox_userInput.Text = "cyclohex-1,3,5-triene"
+        textBox_userInput.Text = "1-(6-carboxy-5-nitro-2-bromo-hex-3-ynyl)cyclodecane"
+        textBox_userInput.Text = "1-cyclopropyl-2-cyclobutyl-3-cyclopentyl-4-cyclohexyl-5-cycloheptyl-6-cyclooctyl-7-cyclononyl-8-cyclodecyl-9-cycloundecyl-10-cyclododecyl-cyclodecane"
+        'textBox_userInput.Text = "1-cyclohexyldecane"
+
+        ' generate token and functional group definitions
+        tokenDefinitions = IUPACParser.generateTokenDefinitions(XElement.Load(OCVresources.tokenDefinitionsFile))
+        functionalGroupDefinitions = IUPACParser.generateFunctionalGroupDefinitions(XElement.Load(OCVresources.functionalGroupDefinitionsFile))
     End Sub
 
     ''' <summary>
@@ -18,14 +26,7 @@
         ' wipe canvas on new input
         c_display.Children.Clear()
 
-        ' load token definitions from token definitions XML file and create token definition list
-        Dim tokenDefinitionsXML As XElement
-        Dim tokenDefinitions As IUPACParser.TokenDefinition()
-        tokenDefinitionsXML = XElement.Load(OCVresources.tokenDefinitionsFile)
-        tokenDefinitions = IUPACParser.generateTokenDefinitions(tokenDefinitionsXML)
-
         ' tokenise example name
-        Console.WriteLine("tokenising " & organicName)
         Dim tokens As Token()
         tokens = IUPACParser.generateTokens(organicName, tokenDefinitions)
 
@@ -34,11 +35,10 @@
             tb_error.Text = tokens(0).value
         Else
             ' convert tokens to AST
-            Console.WriteLine("generating AST for " & organicName)
             Dim AST As IUPACParser.ASTRoot
             AST = IUPACParser.generateAST(organicName, tokens, tokenDefinitions)
 
-            ' display error if there is one
+            ' display error if there is one, otherwise render
             If AST.compoundTree.isError Then
                 tb_error.Text = AST.compoundTree.errorMessage
             Else
@@ -52,12 +52,14 @@
 
                 ' display rendered AST
                 c_display = IUPACRenderer.renderAST(AST.compoundTree, _
+                                                    functionalGroupDefinitions, _
                                                     {c_containerDisplay.ActualWidth, c_containerDisplay.ActualHeight}, _
                                                     OCVresources.scale, _
                                                     OCVresources.alkaneSpacing, OCVresources.alkaneRise, _
                                                     OCVresources.canvasOffset(0), OCVresources.canvasOffset(1), _
                                                     OCVresources.alkaneStartsRising, OCVresources.alkeEneYneLineXOffsetPercentage, _
-                                                    OCVresources.alkEneYneLineYOffsetPercentage)
+                                                    OCVresources.alkEneYneLineYOffsetPercentage,
+                                                    True).canvas
                 c_containerDisplay.Children.Add(c_display)
 
                 ' render image (stub)

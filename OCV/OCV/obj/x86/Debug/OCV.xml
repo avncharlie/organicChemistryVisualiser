@@ -31,7 +31,7 @@ MainWindow
  Given a the name of an organic compound or substituent fragment, an array of tokens representing this name, an array of 
  token definitions, an indication if the given name contains the main chain of the compound and the locants of the chain
  if it isn't, return an ASTAlkaneBase structure representing this object. Deals with nested main chains (complex substituents)
- recursively.
+ recursively. Doesn't initialise the branches variable, used while rendering
  </summary>
 	<param name="organicNameString">
  A string containing the name of the organic compound (used in error messages). In the case of a complex substituent, the
@@ -68,6 +68,22 @@ MainWindow
  Returns an ASTRoot structure representing the organicCompound. If the name is invalid, compoundTree.isError will be 
  true and compoundTree.errorMessage will contain the error message.
  </returns>
+	<remarks>An ASTRoot structure representing the parsed organicCompound</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateFunctionalGroupChild(System.Xml.Linq.XElement)">
+	<summary>
+ Generates a FunctionalGroupChild from a XElement the functional group is stored in. Can handle recursive cases.
+ Doesn't initialise branches.
+ </summary>
+	<param name="childXML">The XElement the child is stored in</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateFunctionalGroupDefinitions(System.Xml.Linq.XElement)">
+	<summary>
+ Given the XElement of the XMl file containing the functional group definitions, parses them into a list of FunctionalGroupDefinition
+ structures. Can handle recursive cases.
+ </summary>
+	<param name="allFunctionalGroupDefinitions">XElement containing functional group definitions file</param>
+	<returns>An array of FunctionalGroupDefinitions containing the definitions of the </returns>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokenDefinition(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
 	<summary>
@@ -99,9 +115,72 @@ MainWindow
 	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
 	<returns>An array of Token structures representing the organic name OR an array containing a single token whose type is ERROR and value contains an error message.</returns>
 	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.generatePolylineFromPoints(System.Windows.Point[])">
+	<summary>
+ Helper function used to convert an array of Points into a polyline
+ </summary>
+	<param name="points">the array of Points to be converted</param>
+	<returns>a polyline representing the array of Points passed in</returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.bubbleSortDescending(System.Int32[])">
+	<summary>
+ Helper function used to sort an integer array. Uses the bubble sort algorithm
+ </summary>
+	<param name="arr">the integer array to be sorted</param>
+	<returns>an integer array containing the elements in the given integer array sorted in descending order</returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.createFunctionalGroupChild(OrganicChemistryVisualiser.IUPACParser.FunctionalGroupChild[]@,OrganicChemistryVisualiser.IUPACRenderer.FunctionalGroupPoints@,OrganicChemistryVisualiser.IUPACParser.ConnectingBranches@,System.Windows.Point,System.Double,System.Double[],System.Double,System.Double)">
+	<summary>
+ Given an an array of IUPACParser.FunctionalGroupChild structures and a FunctionalGroupPoints structure passed by reference, 
+ populate the latter with information from the FunctionGroupChild structure. Used to draw functional group substituents.
+ Handles recursive children. Orientation is always assumed to be -
+   branch 1: 90 deg (north)
+   branch 2: 330 deg (30 deg south from east)
+   branch 3: 210 deg (30 deg south from west)
+   branch 4: in between branch 1 and 2
+   branch 5: in between branch 1 and 3
+   branch 6: in between branch 2 and 3
+ </summary>
+	<param name="children">
+ The children to be drawn. Passed byref as the 'branches' attribute of the structure will be modified as the subroutine runs
+ </param>
+	<param name="output">
+ The FunctionalGroupPoints structure to be filled. Passed byref as the main function is recursive, meaning all calls of the
+ same function will be editing this same structure
+ </param>
+	<param name="parentBranches">
+ The ConnectingBranches structure to be modified. Passed byref as it can be potentially used and modified by all calls of the
+ function
+ </param>
+	<param name="connectionPoint">The point of contact the current child has with the parent, passed as a Point</param>
+	<param name="bondLength">A double containing the bond length of bonds in this structure. Used for drawing</param>
+	<param name="branchAngles">An array of doubles containing the angles of branches from 1-6 in radians</param>
+	<param name="alkaneRise">
+ A double containing the height (y) difference of a low point and high point on a straight chain alkane
+ </param>
+	<param name="alkEneYneLineYOffsetPercentage">
+ A double containing the percentage of the height difference to be used to space out double bonds
+ </param>
+	<remarks>Not to be called directly - interfaced by the createSimpleSubstituent function</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.createSimpleSubstituent(OrganicChemistryVisualiser.IUPACParser.ASTAlkaneBase,System.Int32,OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[],System.Double,OrganicChemistryVisualiser.IUPACRenderer.PointPath,System.Boolean)">
+	<summary>
+ The children to be drawn. Passed byref as the 'branches' attribute of the structure will be modified as the subroutine ----
+ A function to generate a simple substituent as a FunctionalGroupPoint structure. Returns as an array in the case of a
+ multiple locant simple substituent.
+ </summary>
+	<param name="ast">The AST of the whole organic compound</param>
+	<param name="simpleSubstituentIndex">The index of the substituent to be created in the ast.simpleSubstituents array</param>
+	<param name="functionalGroupDefinitions">An array of functionalGroupDefinitions, used to draw functional groups</param>
+	<param name="bondLength">A double containing the bond length of bonds in this structure. Used for drawing</param>
+	<param name="mainChainPointPath">The PointPath of the main chain. Used for positioning to attach substituents</param>
+	<param name="alkaneStartsRising">A boolean to be set true if the alkane is drawn with the first carbon pair rising</param>
+	<returns>
+ An array of FunctionalGroupPoints representing the given simpleSubstituents. The array only contain one element unless the
+ substituent specified had more than one locant position</returns>
+	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.exportCanvasAsImage(System.Windows.Controls.Canvas,System.String,System.String)">
 	<summary>
- Given a canvas element, a filetype of either png or jpg, and a file pat, export it as an image
+ Given a canvas element, a filetype of either png or jpg, and a file path, export the canvas as an image
  Can be used with a rendered AST canvas to export a rendered organicCompound
  </summary>
 	<param name="canvas">The canvas to be rendered</param>

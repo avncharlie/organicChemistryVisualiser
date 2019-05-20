@@ -30,14 +30,14 @@ CONTENTS
 3. Parsing organic names
     3.1 Creating the token list 
     3.2 Parsing the token list into the AST
-    3.3 Parsing the AST into an OrganicCompound
-4. Token data and examples
-    4.1 Parseable tokens
-    4.2 Token followers
-    4.3 Examples of parseable names
-    4.4 Example of a complex AST
-5. Credits
-6. License
+4. Drawing organic names
+5. Token data and examples
+    5.1 Parseable tokens
+    5.2 Token followers
+    5.3 Examples of parseable names
+    5.4 Example of a complex AST
+6. Credits
+7. License
 
 
 ================================================================================
@@ -107,7 +107,8 @@ invalid cases.
 After a list of tokens are created these are then parsed to form
 the AST (Abstract Syntax Tree). This is an intermediary data storage and is
 first parsed form of the organic name. This contains the whole molecule present
-in a nested, heirarchical form. 
+in a nested, heirarchical form.  The following example is just a representation
+of the AST structure, not how it is actually represented internally
 
     e.g. AST for 2-hydroxyhex-5-ene-3-yne
     {
@@ -135,24 +136,20 @@ in a nested, heirarchical form.
         }
     }
 
--------------------------------------------------------------------------------
-3.3. Parsing the AST into an OrganicCompound
 
-The AST is an abstract nested formation of a organic name. An OrganicCompound
-however is an detailed, verbose representation of an organic name. It works
-through virtually building the whole organic name atom by atom into one
-interconnected structure. This structure is used when graphically generating the
-object as it contains the most data in an easily accessible format.
+================================================================================
+4. Drawing organic names
+Drawing organic names is done with  TODOOOOOOO
 
 
 ================================================================================
-4. Token data and examples ~
+5. Token data and examples ~
 
 Below is a list of all the tokens parseable by OCV, all sets of follower tokens,
 examples of parseable names and an example of a more complicated AST structure.
 
 -------------------------------------------------------------------------------
-4.1. Parseable tokens ~
+5.1. Parseable tokens ~
 
     +--------------------------------+---------------------------+
     |             Token              |     Example               |
@@ -189,7 +186,7 @@ examples of parseable names and an example of a more complicated AST structure.
     +--------------------------------+---------------------------+
 
 -------------------------------------------------------------------------------
-4.2. Token followers ~
+5.2. Token followers ~
 
     +-----------+---------------------------------+
     |    Key    |             Meaning             |
@@ -238,7 +235,7 @@ examples of parseable names and an example of a more complicated AST structure.
     mainChainStart => [ multiplier | locantGroup | cyclicalIndicator ]
 
 -------------------------------------------------------------------------------
-4.3. Examples of parseable names ~
+5.3. Examples of parseable names ~
 
     decan-1,10-dioic acid
     hex-1-ene-2-yne
@@ -248,7 +245,7 @@ examples of parseable names and an example of a more complicated AST structure.
     2-[6-(4-hydroxyhex-1-enyl)undeca-2,4-diene-7,9-diyne-1,11-diolyl]-9,8-dihydroxydodec-6-ene
 
 -------------------------------------------------------------------------------
-4.4. Example of a complex AST ~
+5.4. Example of a complex AST ~
 
     e.g. 2-[6-(4-Hydroxyhex-1-enyl)undeca-2,4-diene-7,9-diyne-1,11-diolyl]-9,8-dihydroxydodec-6-ene
     {
@@ -318,7 +315,7 @@ examples of parseable names and an example of a more complicated AST structure.
 
 
 ================================================================================
-5. Credits ~
+6. Credits ~
 
     Made by Alvin Charles
         alvinjoycharles@gmail.com
@@ -326,7 +323,7 @@ examples of parseable names and an example of a more complicated AST structure.
 
 
 ================================================================================
-6. License ~
+7. License ~
 
 OCV is released under the MIT License.
 See: https://opensource.org/licenses/MIT

@@ -25,12 +25,10 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
 
         <!-- menubar stub -->
-        <DockPanel Grid.ColumnSpan="3">
+        <DockPanel>
             <Menu Name="menu_menuBar" Height="23" >
                 <MenuItem Header="File">
                     <MenuItem Header="New" />
@@ -52,7 +50,7 @@
         </DockPanel>
 
         <!-- user input -->
-        <DockPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="20">
+        <DockPanel Grid.Row="1" Margin="20">
             <TextBox Name="textBox_userInput"
                      FontStyle="Italic" FontSize="25"
                      Foreground="#9b9b9b"
@@ -62,12 +60,12 @@
         </DockPanel>
         
         <!-- separator-->
-        <DockPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
+        <DockPanel Grid.Row="2">
             <Rectangle HorizontalAlignment="Stretch" Fill="Black" Height="1"/>
         </DockPanel>
         
-        <!-- picture output (canvas used as container as controls can overlap) -->
-        <DockPanel Grid.Column="0" Grid.Row="3">
+        <!-- canvas output -->
+        <DockPanel Grid.Row="3">
             <Canvas Name="c_containerDisplay">
                 <!-- error textblock -->
                 <TextBlock Name="tb_error"
@@ -75,14 +73,6 @@
                            Foreground="red"
                            FontFamily="Courier New"></TextBlock>
             </Canvas>
-        </DockPanel>
-
-        <!-- resizer -->
-        <GridSplitter Grid.Column="1" Grid.Row="3" ResizeBehavior="PreviousAndNext" Width="5" Background="#FFBCBCBC" HorizontalAlignment="Stretch" />
-
-        <!-- structure info stub -->
-        <DockPanel Grid.Column="2" Grid.Row="3">
-            <TextBlock FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Right side</TextBlock>
         </DockPanel>
         
     </Grid>

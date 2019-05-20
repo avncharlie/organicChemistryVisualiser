@@ -1,4 +1,7 @@
 <!--
+
+amides? others?
+
 ████████╗ ██████╗ ██╗  ██╗███████╗███╗   ██╗███████╗   ██╗  ██╗███╗   ███╗██╗     
 ╚══██╔══╝██╔═══██╗██║ ██╔╝██╔════╝████╗  ██║██╔════╝   ╚██╗██╔╝████╗ ████║██║     
    ██║   ██║   ██║█████╔╝ █████╗  ██╔██╗ ██║███████╗    ╚███╔╝ ██╔████╔██║██║     
@@ -130,7 +133,7 @@ organic name.
             <groupRepeater number="7"> <prefix>hepta</prefix> </groupRepeater>
             <groupRepeater number="8"> <prefix>octa</prefix> </groupRepeater>
             <groupRepeater number="9"> <prefix>nona</prefix> </groupRepeater>
-            <groupRepeater number="10"> <prefix>deac</prefix> </groupRepeater>
+            <groupRepeater number="10"> <prefix>deca</prefix> </groupRepeater>
             <groupRepeater number="11"> <prefix>undeca</prefix> </groupRepeater>
             <groupRepeater number="12"> <prefix>dodeca</prefix> </groupRepeater>
             <groupRepeater number="13"> <prefix>trideca</prefix> </groupRepeater>
@@ -210,33 +213,39 @@ organic name.
         <data>
           
             <functionalGroupSubstituent identification="carboxy">
-                <formula>todo</formula>
                 <type>carboxylic acid</type>
             </functionalGroupSubstituent>
 
             <functionalGroupSubstituent identification="oxo">
-                <formula>todo</formula>
                 <type>ketone</type>
             </functionalGroupSubstituent>
 
             <functionalGroupSubstituent identification="hydroxy">
-                <formula>todo</formula>
                 <type>alcohol</type>
             </functionalGroupSubstituent>
           
             <functionalGroupSubstituent identification="amino">
-                <formula>todo</formula>
                 <type>amine</type>
-            </functionalGroupSubstituent>
-          
-            <functionalGroupSubstituent identification="phenyl">
-                <formula>todo</formula>
-                <type>benzene</type>
             </functionalGroupSubstituent>
 
             <functionalGroupSubstituent identification="nitro">
-                <formula>todo</formula>
                 <type>nitro</type>
+            </functionalGroupSubstituent>
+
+            <functionalGroupSubstituent identification="fluoro">
+                <type>fluoro</type>
+            </functionalGroupSubstituent>
+
+            <functionalGroupSubstituent identification="chloro">
+                <type>chloro</type>
+            </functionalGroupSubstituent>
+          
+            <functionalGroupSubstituent identification="bromo">
+                <type>bromo</type>
+            </functionalGroupSubstituent>
+          
+            <functionalGroupSubstituent identification="iodo">
+                <type>iodo</type>
             </functionalGroupSubstituent>
           
         </data>

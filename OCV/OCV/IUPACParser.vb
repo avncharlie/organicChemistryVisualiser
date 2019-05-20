@@ -2,7 +2,22 @@
 
 Module IUPACParser
 
-    ' --- tokenisation structures ---
+    ' --- functional groups ---
+    Public Structure FunctionalGroupChild
+        Public branches As ConnectingBranches
+        Public bondType As Integer
+        Public representor As String
+        Public colour As String
+        Public children As FunctionalGroupChild()
+    End Structure
+
+    Public Structure FunctionalGroupDefinition
+        Public type As String
+        Public XML As XElement
+        Public children As FunctionalGroupChild()
+    End Structure
+
+    ' --- tokenisation ---
     Public Structure TokenDefinition
         Public name As String
         Public regex As String
@@ -18,13 +33,14 @@ Module IUPACParser
         Public value As String
     End Structure
 
-    ' --- AST structures ---
-    Public Structure FunctionalGroupDefinition
-        Public type As String
+    ' --- parsing  ---
+    Public Structure ConnectingBranches
+        ' branches range from 1 - 6
+        Public takenBranches As Integer()
     End Structure
 
     Public Structure ASTFunctionalGroup
-        Public type As FunctionalGroupDefinition
+        Public type As String
         Public locants As String()
     End Structure
 
@@ -35,6 +51,7 @@ Module IUPACParser
         Public locants As String()
         Public isCyclical As Boolean
         Public length As Integer
+        Public branches As ConnectingBranches() ' `length` elements, each locant specifies the carbon the ConnectingBranches is representing
         Public simpleSubstituents As ASTFunctionalGroup()
         Public complexSubstituents As ASTAlkaneBase()
     End Structure
@@ -55,7 +72,7 @@ Module IUPACParser
     ''' Given a the name of an organic compound or substituent fragment, an array of tokens representing this name, an array of 
     ''' token definitions, an indication if the given name contains the main chain of the compound and the locants of the chain
     ''' if it isn't, return an ASTAlkaneBase structure representing this object. Deals with nested main chains (complex substituents)
-    ''' recursively.
+    ''' recursively. Doesn't initialise the branches variable, used while rendering
     ''' </summary>
     ''' <param name="organicNameString">
     ''' A string containing the name of the organic compound (used in error messages). In the case of a complex substituent, the
@@ -104,10 +121,11 @@ Module IUPACParser
         alkaneBase.isCyclical = False
         alkaneBase.locants = locants
         alkaneBase.length = -1
+        alkaneBase.branches = {}
         alkaneBase.simpleSubstituents = {}
         alkaneBase.complexSubstituents = {}
 
-        ' indicates error position in organicName (e.g "         ^ ")
+        ' indicates error position in organicName ("         ^ ")
         Dim errorPointer As String
 
         ' indicates how many characters the substituents are (used to offset errorPonter when displaying an error for the main chain)
@@ -180,14 +198,6 @@ Module IUPACParser
             Next
         Next
         substituentOffset = substituentOffset - 1
-
-        ' stubs
-        Dim alkeneFunctionalGroupDefinition As FunctionalGroupDefinition
-        alkeneFunctionalGroupDefinition.type = "alkene"
-
-        Dim alkyneFunctionalGroupDefinition As FunctionalGroupDefinition
-        alkyneFunctionalGroupDefinition.type = "alkyne"
-
 
         ' 2. parse main chain
         ' main chain base: [cyclicalIndicator] + multiplier + [hyphen + locantGroup + hyphen + [groupRepeater]] + aneEneYneSuffix + [hyphen + locantGroup + hyphen + [groupRepeater] + (functionalGroupMainChainSuffix | aneEneYneSuffix)]*
@@ -445,7 +455,7 @@ Module IUPACParser
 
                                 ' add alkene functional group to simpleSubstituent array
                                 Dim alkenefunctionalGroup As ASTFunctionalGroup
-                                alkenefunctionalGroup.type = alkeneFunctionalGroupDefinition
+                                alkenefunctionalGroup.type = "alkene"
                                 alkenefunctionalGroup.locants = locantGroupArray
 
                                 ReDim Preserve alkaneBase.simpleSubstituents(alkaneBase.simpleSubstituents.Length)
@@ -453,7 +463,7 @@ Module IUPACParser
                             Case "yne", "yn"
                                 ' add alkene functional group to simpleSubstituent array
                                 Dim alkynefunctionalGroup As ASTFunctionalGroup
-                                alkynefunctionalGroup.type = alkyneFunctionalGroupDefinition
+                                alkynefunctionalGroup.type = "alkyne"
                                 alkynefunctionalGroup.locants = locantGroupArray
 
                                 ' check that locants aren't out of bounds (special check for alkene/yne)
@@ -513,8 +523,9 @@ Module IUPACParser
                                     & "ene or yne suffix expected, not ane"
                                 Return alkaneBase
                         End Select
-                        ' move on to next token
+                        ' move on to next token and set firstPass to false
                         counter = counter + 1
+                        firstPass = False
                     Else
                         ' if not ane, ene or yne, must be a functionalGroupMainChainSuffix
                         If mainChainTokens(counter).type = "functionalGroupMainChainSuffix" Then
@@ -544,8 +555,14 @@ Module IUPACParser
                                     Dim FGSubstituents = tokenDefinitions(index).XML.Descendants("data").Descendants("functionalGroupMainChainSuffix")
                                     For Each FGSub In FGSubstituents
                                         If FGSub.Attribute("identification") = mainChainTokens(counter).value Then
-                                            Dim functionalGroupMainChainSuffixDefinition As FunctionalGroupDefinition
-                                            functionalGroupMainChainSuffixDefinition.type = FGSub.Element("type").Value
+                                            Dim functionalGroupMainChainSuffixDefinition As String
+                                            functionalGroupMainChainSuffixDefinition = FGSub.Element("type").Value
+
+                                            ' special case - a cyclical carboxylic acid is different from a normal one as it extends out with one carbon
+                                            ' there is a special type for it - cyclical carboxylic acid
+                                            If functionalGroupMainChainSuffixDefinition = "carboxylic acid" And alkaneBase.isCyclical Then
+                                                functionalGroupMainChainSuffixDefinition = "cyclical carboxylic acid"
+                                            End If
 
                                             Dim functionalGroupMainChainSuffixGroup As ASTFunctionalGroup
                                             functionalGroupMainChainSuffixGroup.type = functionalGroupMainChainSuffixDefinition
@@ -820,8 +837,14 @@ Module IUPACParser
                             Dim FGSubstituents = tokenDefinitions(index).XML.Descendants("data").Descendants("functionalGroupSubstituent")
                             For Each FGSub In FGSubstituents
                                 If FGSub.Attribute("identification") = substituentTokens(counter).value Then
-                                    Dim functionalGroupMainSubstituentDefinition As FunctionalGroupDefinition
-                                    functionalGroupMainSubstituentDefinition.type = FGSub.Element("type").Value
+                                    Dim functionalGroupMainSubstituentDefinition As String
+                                    functionalGroupMainSubstituentDefinition = FGSub.Element("type").Value
+
+                                    ' special case - a cyclical carboxylic acid is different from a normal one as it extends out with one carbon
+                                    ' there is a special type for it - cyclical carboxylic acid
+                                    If functionalGroupMainSubstituentDefinition = "carboxylic acid" And alkaneBase.isCyclical Then
+                                        functionalGroupMainSubstituentDefinition = "cyclical carboxylic acid"
+                                    End If
 
                                     Dim functionalGroupMainSubstituentGroup As ASTFunctionalGroup
                                     functionalGroupMainSubstituentGroup.type = functionalGroupMainSubstituentDefinition
@@ -837,6 +860,7 @@ Module IUPACParser
                     moveCounter = True
                 Else
                     If substituentTokens(counter).type = "openBracket" Then
+                        complexSubstituentTokens = {}
                         ' possible complex bracketed substituent
                         bracketCount = 1
                         bracket = substituentTokens(counter).value
@@ -918,6 +942,7 @@ Module IUPACParser
                         End If
                     Else
                         If substituentTokens(counter).type = "cyclicalIndicator" Or substituentTokens(counter).type = "multiplier" Then
+                            complexSubstituentTokens = {}
                             ' possible complex unbracketed substituent
                             Dim startCounter As Integer
                             startCounter = counter
@@ -992,20 +1017,23 @@ Module IUPACParser
                 End If
             Else
                 ' if last item is a locantgroup - error
-                If substituentTokens(counter).type = "locantGroup" And counter = substituentTokens.Length - 1 Then
-                    errorPointer = ""
-                    For tCounter = 0 To counter - 1
-                        For tokenChars = 0 To substituentTokens(tCounter).value.Length - 1
-                            errorPointer = errorPointer & " "
+                If counter < substituentTokens.Length Then
+                    If substituentTokens(counter).type = "locantGroup" And counter = substituentTokens.Length - 1 Then
+                        errorPointer = ""
+                        For tCounter = 0 To counter - 1
+                            For tokenChars = 0 To substituentTokens(tCounter).value.Length - 1
+                                errorPointer = errorPointer & " "
+                            Next
                         Next
-                    Next
-                    alkaneBase.isError = True
-                    alkaneBase.errorMessage = "the name """ & organicNameString & """ is not valid" & Environment.NewLine _
-                        & organicNameString & Environment.NewLine _
-                        & errorPointer & "^" & Environment.NewLine _
-                        & "invalid position for locantGroup"
-                    Return alkaneBase
+                        alkaneBase.isError = True
+                        alkaneBase.errorMessage = "the name """ & organicNameString & """ is not valid" & Environment.NewLine _
+                            & organicNameString & Environment.NewLine _
+                            & errorPointer & "^" & Environment.NewLine _
+                            & "invalid position for locantGroup"
+                        Return alkaneBase
+                    End If
                 End If
+
             End If
 
         End While
@@ -1030,8 +1058,8 @@ Module IUPACParser
     ''' Returns an ASTRoot structure representing the organicCompound. If the name is invalid, compoundTree.isError will be 
     ''' true and compoundTree.errorMessage will contain the error message.
     ''' </returns>
-    ''' <remarks></remarks>
-    Public Function generateAST(ByVal organicNameString As String, ByVal organicNameTokens As Token(), ByVal tokenDefinitions As TokenDefinition())
+    ''' <remarks>An ASTRoot structure representing the parsed organicCompound</remarks>
+    Public Function generateAST(ByVal organicNameString As String, ByVal organicNameTokens As Token(), ByVal tokenDefinitions As TokenDefinition()) As ASTRoot
         ' create root
         Dim ast As ASTRoot
         ast.organicName = organicNameString
@@ -1039,6 +1067,65 @@ Module IUPACParser
         ast.compoundTree = generateASTAlkaneBase(organicNameString, organicNameTokens, True, {}, tokenDefinitions)
         Return ast
     End Function
+
+    ''' <summary>
+    ''' Generates a FunctionalGroupChild from a XElement the functional group is stored in. Can handle recursive cases.
+    ''' Doesn't initialise branches.
+    ''' </summary>
+    ''' <param name="childXML">The XElement the child is stored in</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Private Function generateFunctionalGroupChild(ByVal childXML As XElement) As FunctionalGroupChild
+        Dim newFunctionalGroupChild As FunctionalGroupChild
+
+        ' base case and recursive case
+        newFunctionalGroupChild.bondType = CType(childXML.Element("bondType").Value, Integer)
+        newFunctionalGroupChild.representor = childXML.Element("representor").Value
+        newFunctionalGroupChild.colour = childXML.Element("colour").Value
+        newFunctionalGroupChild.children = {}
+        Dim branches As ConnectingBranches
+        branches.takenBranches = {}
+        newFunctionalGroupChild.branches = branches
+
+        ' recursive case (base case - no children)
+        For Each child In childXML.Elements("child")
+            ReDim Preserve newFunctionalGroupChild.children(newFunctionalGroupChild.children.Length)
+            newFunctionalGroupChild.children(newFunctionalGroupChild.children.Length - 1) = generateFunctionalGroupChild(child)
+        Next
+
+        Return newFunctionalGroupChild
+    End Function
+
+    ''' <summary>
+    ''' Given the XElement of the XMl file containing the functional group definitions, parses them into a list of FunctionalGroupDefinition
+    ''' structures. Can handle recursive cases.
+    ''' </summary>
+    ''' <param name="allFunctionalGroupDefinitions">XElement containing functional group definitions file</param>
+    ''' <returns>An array of FunctionalGroupDefinitions containing the definitions of the </returns>
+    ''' <remarks></remarks>
+    Public Function generateFunctionalGroupDefinitions(ByVal allFunctionalGroupDefinitions As XElement) As FunctionalGroupDefinition()
+        Dim definitions As FunctionalGroupDefinition()
+        definitions = {}
+        For Each functionalGroupDefinition In allFunctionalGroupDefinitions.Elements()
+            Dim newDefinition As FunctionalGroupDefinition
+            newDefinition.type = functionalGroupDefinition.Attribute("type")
+            newDefinition.XML = functionalGroupDefinition
+            newDefinition.children = {}
+
+            ' cycle through children and generate FunctionalGroupChild representing them
+            For Each child In functionalGroupDefinition.Elements("child")
+                ReDim Preserve newDefinition.children(newDefinition.children.Length)
+                newDefinition.children(newDefinition.children.Length - 1) = generateFunctionalGroupChild(child)
+            Next
+
+            ' add to return list
+            ReDim Preserve definitions(definitions.Length)
+            definitions(definitions.Length - 1) = newDefinition
+        Next
+
+        Return definitions
+    End Function
+
 
     ''' <summary>
     ''' Given a singular token definition as an XML node and all the token definitions in XML format, return a TokenDefinition
