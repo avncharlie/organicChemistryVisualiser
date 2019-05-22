@@ -1,12 +1,4 @@
-<functionalGroups>
-  <functionalGroup type="_branch">
-    <child>
-      <representor></representor>
-      <bondType>1</bondType>
-      <colour>#ffffff</colour>
-    </child>
-  </functionalGroup>
-  
+<functionalGroups>  
   <functionalGroup type="fluoro">
     <child>
       <representor>F</representor>
@@ -36,6 +28,19 @@
       <representor>I</representor>
       <bondType>1</bondType>
       <colour>#c621ef</colour>
+    </child>
+  </functionalGroup>
+
+  <functionalGroup type="amide">
+    <child>
+      <representor> O </representor>
+      <bondType>2</bondType>
+      <colour>#ff0000</colour>
+    </child>
+    <child>
+      <representor>NH₂</representor>
+      <bondType>1</bondType>
+      <colour>#ff0000</colour>
     </child>
   </functionalGroup>
   

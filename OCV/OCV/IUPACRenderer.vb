@@ -1,7 +1,5 @@
 ﻿Module IUPACRenderer
 
-    ' index of Point in points + 1 = its locant
-    ' polygon only used when cyclical
     Public Structure PointPath
         Public points As Point()
         Public line As Polyline
@@ -19,8 +17,6 @@
         Public representers As TextPoint()
     End Structure
 
-    ' index of simpleSubstituent + 1 = its locant
-    ' index of complexSubstituent + 1 = its locant
     Public Structure OrganicCompoundPoints
         Public mainChains As PointPath()
         Public eneYnePoints As PointPath()
@@ -342,7 +338,15 @@
         Return substituentPoints
     End Function
 
-    ' rotates point
+    ''' <summary>
+    ''' Given a point to rotate, an origin point and an angle, returns the point rotated around the origin by the angle
+    ''' in a clockwise rotation.
+    ''' </summary>
+    ''' <param name="point">The point to be rotated</param>
+    ''' <param name="origin">Contains the coordinates the point should be rotated around</param>
+    ''' <param name="angle">The angle in radians to rotate the point by, as a double</param>
+    ''' <returns>The point rotated according to the given specifications</returns>
+    ''' <remarks></remarks>
     Private Function rotatePoint(ByVal point As Point, ByVal origin As Point, ByVal angle As Double) As Point
         Dim pointCopy As New Point(point.X, point.Y)
         Dim rotatedPoint As New Point(0, 0)
@@ -351,7 +355,26 @@
         Return rotatedPoint
     End Function
 
-    ' byref cos save memory
+    ''' <summary>
+    ''' Given a point to translate and a vector in the form (x vector, y vector) as a point, translate the point by the vector.
+    ''' </summary>
+    ''' <param name="origPoint">The point to be translated</param>
+    ''' <param name="vector">A point in the form (x vector, y vector) to translate origPoint by</param>
+    ''' <returns>The point translated according to the given specifications</returns>
+    ''' <remarks></remarks>
+    Private Function translatePoint(ByVal origPoint As Point, ByVal vector As Point) As Point
+        Dim translatedPoint As New Point(origPoint.X + vector.X, origPoint.Y + vector.Y)
+        Return translatedPoint
+    End Function
+
+    ''' <summary>
+    ''' Given an OrganicCompoundPoints, an origin and an angle, rotate the OrganicCompoundPoints around the origin by the angle
+    ''' in a clockwise direction.
+    ''' </summary>
+    ''' <param name="ocPoints">The OrganicCompoundPoints to rotate. Passed byref to save memory</param>
+    ''' <param name="origin">The point to rotate ocPoints by</param>
+    ''' <param name="angle">The angle in radians to rotate ocPoints by in a clockwise direction</param>
+    ''' <remarks></remarks>
     Private Sub rotateOrganicCompountPoints(ByRef ocPoints As OrganicCompoundPoints, ByVal origin As Point, ByVal angle As Double)
         ' rotate main chains
         For mainChainIndex = 0 To ocPoints.mainChains.Length - 1
@@ -389,13 +412,12 @@
         Next
     End Sub
 
-    ' translates a point
-    Private Function translatePoint(ByVal origPoint As Point, ByVal vector As Point) As Point
-        Dim translatedPoint As New Point(origPoint.X + vector.X, origPoint.Y + vector.Y)
-        Return translatedPoint
-    End Function
-
-    ' byref to save memory
+    ''' <summary>
+    ''' Given an OrganicCompoundPoints and a vector, translate the OrganicCompoundPoints by the vector.
+    ''' </summary>
+    ''' <param name="ocPoints">The OrganicCompoundPoints to be translated. Passed byref to save memory</param>
+    ''' <param name="vector">The vector in the form (x vector, y vector) to translate ocPoints by</param>
+    ''' <remarks></remarks>
     Private Sub translateOrganicCompoundPoints(ByRef ocPoints As OrganicCompoundPoints, ByVal vector As Point)
         ' translate main chains
         For mainChainIndex = 0 To ocPoints.mainChains.Length - 1
@@ -433,10 +455,49 @@
         Next
     End Sub
 
-    ' renders an AST
+    ''' <summary>
+    ''' Given an AST, return an OrganicCompoundPoints function containing a populated canvas representing the given AST.
+    ''' 1000 line function justification: This function performs one logical task - given a Abstract Syntax Tree, it returns
+    ''' an OrganicCompountPoints structure visualising this tree. The component parts of this problem are split into other
+    ''' functions and subroutines that are continually used throughout the function - primarily: 
+    '''   translateOrganicCompoundPoints, rotateOrganicCompountPoints, translatePoint, rotatePoint.
+    ''' All the other functions in this page are also called through this function, and big parts of this problem, such as
+    ''' generating simple substituents.
+    ''' </summary>
+    ''' <param name="ast">The AST to be visualised</param>
+    ''' <param name="functionalGroupDefinitions">An array of FunctionalGroupDefinitions</param>
+    ''' <param name="scale">
+    ''' A double containing the scale of the output. 1 is default, other scales may seem off-kilter. Is optional.
+    ''' </param>
+    ''' <param name="alkaneSpacing">A double containing the x distance between two points in an alkane chain. Is optional.</param>
+    ''' <param name="alkaneRise">A double containing the y height difference between two points in an alkane chain. Is optional.</param>
+    ''' <param name="canvasOffsetX">
+    ''' A double containing how much x offset from the top of the canvas the generated elements should have. Is optional.
+    ''' </param>
+    ''' <param name="canvasOffsetY">
+    ''' A double containing how much y offset from the top of the canvas the generated elements should have. Is optional.
+    ''' </param>
+    ''' <param name="alkaneStartsRising">
+    ''' A boolean, set to true if the alkane chain starts rising from the first carbon-carbon bond. Is optional.
+    ''' </param>
+    ''' <param name="alkeEneYneLineXOffsetPercentage">
+    ''' A double containing a percentage from 0 to 1. This percentage of the alkaneSpacing value is used to offset the x distance
+    ''' between a single bond and a double/triple bond line. Is optional.
+    ''' </param>
+    ''' <param name="alkEneYneLineYOffsetPercentage">
+    ''' A double containing a percentage from 0 to 1. This percentage of the alkaneRise value is used to offset the y distance
+    ''' between a single bond and a double/triple bond line. Is optional.
+    ''' </param>
+    ''' <param name="firstCall">
+    ''' A boolean to be set to true if this is the first call of the function. Used to differentiate between the first call and other
+    ''' recursive calls.
+    ''' </param>
+    ''' <returns>
+    ''' An OrganicCompoundPoints object, which contains a populated canvas object containing the visualisation of the ast.
+    ''' </returns>
+    ''' <remarks>The exportCanvasAsImage function can be used to export the canvas as an image.</remarks>
     Public Function renderAST(ByRef ast As IUPACParser.ASTAlkaneBase, _
-                              ByVal functionalGroupDefinitions As IUPACParser.FunctionalGroupDefinition(), _
-                              ByVal resolutionXY As Integer(), _
+                              ByVal functionalGroupDefinitions As IUPACParser.FunctionalGroupDefinition(),
                               Optional ByVal scale As Double = 1,
                               Optional ByVal alkaneSpacing As Integer = 30,
                               Optional ByVal alkaneRise As Integer = 17,
@@ -448,8 +509,6 @@
                               Optional ByVal firstCall As Boolean = True) As OrganicCompoundPoints
         ' initialise canvas
         Dim display As New Canvas
-        display.Width = resolutionXY(0)
-        display.Height = resolutionXY(1)
         display.Background = Brushes.White
 
         ' initialise organicCompoundPoints for current alkane
@@ -730,21 +789,25 @@
             ocPoints.mainChains(0).points(ocPoints.mainChains(0).points.Length - 1) = startingPoint
         End If
 
-
-        ' --- simple substituents ---
-        Dim createdSubstituents As FunctionalGroupPoints()
-        For substituentIndex = 0 To ast.simpleSubstituents.Length - 1
-            ' create SubstituentPoint for currently indexed substituent
-            ' if multi locant substituent, multiple SubstituetPoints will be returned
-            createdSubstituents = createSimpleSubstituent(ast, substituentIndex, functionalGroupDefinitions, bondLength, ocPoints.mainChains(0), alkaneStartsRising)
-            For index = 0 To createdSubstituents.Length - 1
-                ' add each created substituent point to simpleSubstituents array to be drawn later
-                ReDim Preserve ocPoints.simpleSubstituents(ocPoints.simpleSubstituents.Length)
-                ocPoints.simpleSubstituents(ocPoints.simpleSubstituents.Length - 1) = createdSubstituents(index)
-            Next
-        Next
-
         ' --- complex substituents ---
+        ' multi locant complex substituents have to be split up as they share the same connectingBranches object, leading toproblems while drawing
+        Dim complexSubstituentIndex = 0
+        While complexSubstituentIndex < ast.complexSubstituents.Length
+            If ast.complexSubstituents(complexSubstituentIndex).locants.Length > 1 Then
+                For locantIndex = 1 To ast.complexSubstituents(complexSubstituentIndex).locants.Length - 1
+                    ' copy complex substituent to new locant
+                    ReDim Preserve ast.complexSubstituents(ast.complexSubstituents.Length)
+                    ast.complexSubstituents(ast.complexSubstituents.Length - 1) = IUPACParser.copyAST(ast.complexSubstituents(complexSubstituentIndex))
+                    ' change locant to specific other locant
+                    ast.complexSubstituents(ast.complexSubstituents.Length - 1).locants = {ast.complexSubstituents(complexSubstituentIndex).locants(locantIndex)}
+                Next
+
+                ' rewrite locants of first complex substituent to just the first locant
+                ast.complexSubstituents(complexSubstituentIndex).locants = {ast.complexSubstituents(complexSubstituentIndex).locants(0)}
+            End If
+            complexSubstituentIndex = complexSubstituentIndex + 1
+        End While
+
         For complexSubstituentIndex = 0 To ast.complexSubstituents.Length - 1
             Dim locant As Integer
             Dim rotation As Double
@@ -756,7 +819,6 @@
                 Dim newComplexPoints As OrganicCompoundPoints
                 newComplexPoints = renderAST(ast.complexSubstituents(complexSubstituentIndex),
                                              functionalGroupDefinitions,
-                                             {0, 0},
                                              scale,
                                              alkaneSpacing,
                                              alkaneRise,
@@ -863,7 +925,7 @@
                     ocPoints.mainChains(ocPoints.mainChains.Length - 1) = newComplexPoints.mainChains(index)
                 Next
 
-                ' add simpleSubstituens
+                ' add simpleSubstituents
                 For index = 0 To newComplexPoints.simpleSubstituents.Length - 1
                     ReDim Preserve ocPoints.simpleSubstituents(ocPoints.simpleSubstituents.Length)
                     ocPoints.simpleSubstituents(ocPoints.simpleSubstituents.Length - 1) = newComplexPoints.simpleSubstituents(index)
@@ -874,6 +936,19 @@
                     ReDim Preserve ocPoints.complexSubstituentConnectors(ocPoints.complexSubstituentConnectors.Length)
                     ocPoints.complexSubstituentConnectors(ocPoints.complexSubstituentConnectors.Length - 1) = newComplexPoints.complexSubstituentConnectors(index)
                 Next
+            Next
+        Next
+
+        ' --- simple substituents ---
+        Dim createdSubstituents As FunctionalGroupPoints()
+        For substituentIndex = 0 To ast.simpleSubstituents.Length - 1
+            ' create SubstituentPoint for currently indexed substituent
+            ' if multi locant substituent, multiple SubstituetPoints will be returned
+            createdSubstituents = createSimpleSubstituent(ast, substituentIndex, functionalGroupDefinitions, bondLength, ocPoints.mainChains(0), alkaneStartsRising)
+            For index = 0 To createdSubstituents.Length - 1
+                ' add each created substituent point to simpleSubstituents array to be drawn later
+                ReDim Preserve ocPoints.simpleSubstituents(ocPoints.simpleSubstituents.Length)
+                ocPoints.simpleSubstituents(ocPoints.simpleSubstituents.Length - 1) = createdSubstituents(index)
             Next
         Next
 
@@ -992,6 +1067,7 @@
                     End If
                 Next
             Next
+
             ' checking through simpleSubstituents points
             For substituentIndex = 0 To ocPoints.simpleSubstituents.Length - 1
                 ' points
@@ -1028,12 +1104,39 @@
                 Next
             Next
 
+            ' checking through complexSubstituent points
+            For complexSubstituentConnectorIndex = 0 To ocPoints.complexSubstituentConnectors.Length - 1
+                For pointIndex = 0 To ocPoints.complexSubstituentConnectors(complexSubstituentConnectorIndex).points.Length - 1
+                    If ocPoints.complexSubstituentConnectors(complexSubstituentConnectorIndex).points(pointIndex).Y < topmostPoint Then
+                        topmostPoint = ocPoints.mainChains(complexSubstituentConnectorIndex).points(pointIndex).Y
+                    End If
+                    If ocPoints.complexSubstituentConnectors(complexSubstituentConnectorIndex).points(pointIndex).Y > bottommostPoint Then
+                        bottommostPoint = ocPoints.mainChains(complexSubstituentConnectorIndex).points(pointIndex).Y
+                    End If
+                    If ocPoints.complexSubstituentConnectors(complexSubstituentConnectorIndex).points(pointIndex).X < leftmostPoint Then
+                        leftmostPoint = ocPoints.mainChains(complexSubstituentConnectorIndex).points(pointIndex).X
+                    End If
+                    If ocPoints.complexSubstituentConnectors(complexSubstituentConnectorIndex).points(pointIndex).X > rightmostPoint Then
+                        rightmostPoint = ocPoints.mainChains(complexSubstituentConnectorIndex).points(pointIndex).X
+                    End If
+                Next
+            Next
+
             For Each child In display.Children
                 Canvas.SetTop(child, canvasOffsetY + -1 * topmostPoint)
                 Canvas.SetLeft(child, canvasOffsetX + -1 * leftmostPoint)
             Next
-        End If
 
+            display.Width = rightmostPoint + canvasOffsetX * 2
+            display.Height = bottommostPoint + canvasOffsetY * 2
+
+            If leftmostPoint < 0 Then
+                display.Width = display.Width + -1 * leftmostPoint
+            End If
+            If topmostPoint < 0 Then
+                display.Height = display.Height + -1 * topmostPoint
+            End If
+        End If
         ocPoints.canvas = display
         Return ocPoints
     End Function

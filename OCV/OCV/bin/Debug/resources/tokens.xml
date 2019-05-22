@@ -263,33 +263,29 @@ organic name.
         <data>
           
             <functionalGroupMainChainSuffix identification="oic acid">
-                <formula>todo</formula>
                 <type>carboxylic acid</type>
-                <mustBeEnding>true</mustBeEnding>
             </functionalGroupMainChainSuffix>
           
             <functionalGroupMainChainSuffix identification="al">
-                <formula>todo</formula>
                 <type>aldehyde</type>
-                <mustBeEnding>true</mustBeEnding>
             </functionalGroupMainChainSuffix>
           
             <functionalGroupMainChainSuffix identification="one">
-                <formula>todo</formula>
                 <type>ketone</type>
-                <mustBeEnding>false</mustBeEnding>
             </functionalGroupMainChainSuffix>       
           
             <functionalGroupMainChainSuffix identification="ol">
-                <formula>todo</formula>
                 <type>alcohol</type>
-                <mustBeEnding>false</mustBeEnding>
             </functionalGroupMainChainSuffix>
           
             <functionalGroupMainChainSuffix identification="amine">
                 <formula>todo</formula>
                 <type>amine</type>
                 <mustBeEnding>false</mustBeEnding>
+            </functionalGroupMainChainSuffix>
+
+            <functionalGroupMainChainSuffix identification="amide">
+                <type>amide</type>
             </functionalGroupMainChainSuffix>
           
         </data>

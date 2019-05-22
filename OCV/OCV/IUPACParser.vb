@@ -35,7 +35,6 @@ Module IUPACParser
 
     ' --- parsing  ---
     Public Structure ConnectingBranches
-        ' branches range from 1 - 6
         Public takenBranches As Integer()
     End Structure
 
@@ -51,7 +50,7 @@ Module IUPACParser
         Public locants As String()
         Public isCyclical As Boolean
         Public length As Integer
-        Public branches As ConnectingBranches() ' `length` elements, each locant specifies the carbon the ConnectingBranches is representing
+        Public branches As ConnectingBranches()
         Public simpleSubstituents As ASTFunctionalGroup()
         Public complexSubstituents As ASTAlkaneBase()
     End Structure
@@ -61,18 +60,51 @@ Module IUPACParser
         Public compoundTree As ASTAlkaneBase
     End Structure
 
+    ''' <summary>
+    ''' Given an AST as an ASTAlkaneBase, return a copy of the AST. Fully copies all arrays present in the original AST so there
+    ''' are no unwanted links between the original and the copy.
+    ''' </summary>
+    ''' <param name="origAST">The AST to copy</param>
+    ''' <returns>A copy of origAST</returns>
+    ''' <remarks></remarks>
+    Public Function copyAST(ByVal origAST As ASTAlkaneBase) As ASTAlkaneBase
+        Dim copied As IUPACParser.ASTAlkaneBase
+        copied.branches = {}
+        copied.complexSubstituents = {}
+        copied.errorMessage = origAST.errorMessage
+        copied.isCyclical = origAST.isCyclical
+        copied.isError = origAST.isError
+        copied.isMainChain = origAST.isMainChain
+        copied.length = origAST.length
+        copied.locants = {}
+        copied.simpleSubstituents = {}
 
-    ' todo:
-    '   check for valid functionalGroupMainChainSuffix order (e.g. -oic acid or -al should be last, -ene before -yne, etc)
-    '   big try catch for errors in AST function
-    '   error on cycloethane and cyclomethane
+        ' copy arrays so they are not linked
+        ReDim copied.branches(origAST.branches.Length - 1)
+        Array.Copy(origAST.branches, copied.branches, origAST.branches.Length)
 
+        ReDim copied.complexSubstituents(origAST.complexSubstituents.Length - 1)
+        Array.Copy(origAST.complexSubstituents, copied.complexSubstituents, origAST.complexSubstituents.Length)
+
+        ReDim copied.locants(origAST.locants.Length - 1)
+        Array.Copy(origAST.locants, copied.locants, origAST.locants.Length)
+
+        ReDim copied.simpleSubstituents(origAST.simpleSubstituents.Length - 1)
+        Array.Copy(origAST.simpleSubstituents, copied.simpleSubstituents, origAST.simpleSubstituents.Length)
+
+        Return copied
+    End Function
 
     ''' <summary>
     ''' Given a the name of an organic compound or substituent fragment, an array of tokens representing this name, an array of 
     ''' token definitions, an indication if the given name contains the main chain of the compound and the locants of the chain
     ''' if it isn't, return an ASTAlkaneBase structure representing this object. Deals with nested main chains (complex substituents)
-    ''' recursively. Doesn't initialise the branches variable, used while rendering
+    ''' recursively. Doesn't initialise the branches variable, used while rendering.
+    ''' 1000 line function justification: In reality, parsing tokens and generating an AST  would be done using a finite state 
+    ''' automata. This function was implemented without a finite state automata due to the author's lack of knowledge regarding
+    ''' its implementation. This resulted in a large amount of code with many conditional and repetition control structures used
+    ''' in this function. While the function is a 1000 lines long, it still only does one logical task - parse a list of tokens 
+    ''' into an AST.
     ''' </summary>
     ''' <param name="organicNameString">
     ''' A string containing the name of the organic compound (used in error messages). In the case of a complex substituent, the
@@ -92,7 +124,7 @@ Module IUPACParser
     ''' present in the errorMessage variable
     ''' </returns>
     ''' <remarks>Should be called by the generateAST function, not by the user</remarks>
-    Private Function generateASTAlkaneBase(ByVal organicNameString As String, ByVal nameTokens As Token(), ByVal isMainChain As Boolean, ByVal locants As String(), ByRef tokenDefinitions As TokenDefinition()) As ASTAlkaneBase
+    Private Function generateASTAlkaneBase(ByVal organicNameString As String, ByVal nameTokens As Token(), ByVal isMainChain As Boolean, ByVal locants As String(), ByRef tokenDefinitions As TokenDefinition(), ByRef functionalGroupDefinitions As FunctionalGroupDefinition()) As ASTAlkaneBase
         ' OVERVIEW -
         ' key: 
         '   token1 + token2 means token1 is followed by token 2
@@ -109,10 +141,6 @@ Module IUPACParser
         '       to differentiate from simple substituent - first make sure its not the main chain and then if any substituent has a multiplier in it, that group is automatically a complex substituent
         ' errors:
         '   return in the form "ERROR: <error message>"
-
-        ' NEXT TODO:
-        '   big try catch for unknown errors
-        '   hierarchical functional group substituent error checking
 
         Dim alkaneBase As ASTAlkaneBase
         alkaneBase.isError = False
@@ -222,15 +250,36 @@ Module IUPACParser
                 Next
             End If
         Next
+
+        ' error on cyclomethane or cycloethane
+        If alkaneBase.length < 3 And alkaneBase.isCyclical Then
+            errorPointer = ""
+            ' add substituentOffset
+            For offset = 0 To substituentOffset
+                errorPointer = errorPointer & " "
+            Next
+            alkaneBase.isError = True
+            alkaneBase.errorMessage = "the name """ & organicNameString & """ is not valid" & Environment.NewLine _
+                & organicNameString & Environment.NewLine _
+                & errorPointer & "^" & Environment.NewLine _
+                & "cyclical main chain of length " & alkaneBase.length & " invalid"
+            Return alkaneBase
+        End If
+
         ' skip initial possible cyclical indicator and multiplier
         counter = counter + 1
 
         If counter > mainChainTokens.Length - 1 Then
             ' first token is after cyclicalIndicator if it is there is a multiplier
+            errorPointer = ""
+            ' add substituentOffset
+            For offset = 0 To substituentOffset
+                errorPointer = errorPointer & " "
+            Next
             alkaneBase.isError = True
             alkaneBase.errorMessage = "the name """ & organicNameString & """ is not valid" & Environment.NewLine _
                 & organicNameString & Environment.NewLine _
-                & "^" & Environment.NewLine _
+                & errorPointer & "^" & Environment.NewLine _
                 & "malformed main chain - too short"
             Return alkaneBase
         End If
@@ -558,6 +607,26 @@ Module IUPACParser
                                             Dim functionalGroupMainChainSuffixDefinition As String
                                             functionalGroupMainChainSuffixDefinition = FGSub.Element("type").Value
 
+                                            ' throw error if ending mainChainSuffix not at end
+                                            If {"carboxylic acid", "aldehyde"}.Contains(functionalGroupMainChainSuffixDefinition) And counter <> mainChainTokens.Length - 1 Then
+                                                errorPointer = ""
+                                                For tCounter = 0 To counter - 1
+                                                    For tokenChars = 0 To mainChainTokens(tCounter).value.Length - 1
+                                                        errorPointer = errorPointer & " "
+                                                    Next
+                                                Next
+                                                ' add substituentOffset
+                                                For offset = 0 To substituentOffset
+                                                    errorPointer = errorPointer & " "
+                                                Next
+                                                alkaneBase.isError = True
+                                                alkaneBase.errorMessage = "the name """ & organicNameString & """ is not valid" & Environment.NewLine _
+                                                    & organicNameString & Environment.NewLine _
+                                                    & errorPointer & "^" & Environment.NewLine _
+                                                    & functionalGroupMainChainSuffixDefinition & " suffix not positioned last"
+                                                Return alkaneBase
+                                            End If
+
                                             ' special case - a cyclical carboxylic acid is different from a normal one as it extends out with one carbon
                                             ' there is a special type for it - cyclical carboxylic acid
                                             If functionalGroupMainChainSuffixDefinition = "carboxylic acid" And alkaneBase.isCyclical Then
@@ -635,6 +704,7 @@ Module IUPACParser
                 Return alkaneBase
             End If
         End While
+
 
         ' 3. parse substituents
         '   case 1. locantGroup + hyphen + [groupRepeater] + functionalGroupSubstituent
@@ -917,7 +987,7 @@ Module IUPACParser
 
                             ' recursing to generate an ASTAlkaneBase structure to add to the complexSubstituents array
                             ' return immediately if error
-                            newComplexSubstituent = generateASTAlkaneBase(newComplexSubstituentString, complexSubstituentTokens, False, substituentTokens(locantGroupIndex).value.Split(","), tokenDefinitions)
+                            newComplexSubstituent = generateASTAlkaneBase(newComplexSubstituentString, complexSubstituentTokens, False, substituentTokens(locantGroupIndex).value.Split(","), tokenDefinitions, functionalGroupDefinitions)
                             If newComplexSubstituent.isError Then
                                 Return newComplexSubstituent
                             Else
@@ -989,7 +1059,7 @@ Module IUPACParser
                             End If
 
                             ' recursing to generate an ASTAlkaneBase structure to add to the complexSubstituents array
-                            newComplexSubstituent = generateASTAlkaneBase(newComplexSubstituentString, complexSubstituentTokens, False, substituentTokens(locantGroupIndex).value.Split(","), tokenDefinitions)
+                            newComplexSubstituent = generateASTAlkaneBase(newComplexSubstituentString, complexSubstituentTokens, False, substituentTokens(locantGroupIndex).value.Split(","), tokenDefinitions, functionalGroupDefinitions)
 
                             If newComplexSubstituent.isError Then
                                 Return newComplexSubstituent
@@ -1038,6 +1108,66 @@ Module IUPACParser
 
         End While
 
+        ' --- check bonds in carbons to see if compound possible ---
+        ' if not, throw error
+        ' set up bonds in carbon chain
+        Dim availableBonds As Integer()
+        ReDim availableBonds(alkaneBase.length - 1)
+        For bondIndex = 0 To availableBonds.Length - 1
+            availableBonds(bondIndex) = 2
+        Next
+        If Not alkaneBase.isCyclical Then
+            availableBonds(0) = 3
+            availableBonds(availableBonds.Length - 1) = 3
+        End If
+
+        ' functional groups
+        Dim transformedLocantIndex As Integer
+        For simpleSubstituentIndex = 0 To alkaneBase.simpleSubstituents.Length - 1
+            For locantIndex = 0 To alkaneBase.simpleSubstituents(simpleSubstituentIndex).locants.Length - 1
+                transformedLocantIndex = CType(alkaneBase.simpleSubstituents(simpleSubstituentIndex).locants(locantIndex), Integer) - 1
+
+                Select Case alkaneBase.simpleSubstituents(simpleSubstituentIndex).type
+                    ' for ene and yne, deduction is for current locant and next one too (as it is a carbon-carbon bond)
+                    Case "alkene"
+                        availableBonds(transformedLocantIndex) = availableBonds(transformedLocantIndex) - 1
+                        availableBonds(transformedLocantIndex + 1) = availableBonds(transformedLocantIndex + 1) - 1
+                    Case "alkyne"
+                        availableBonds(transformedLocantIndex) = availableBonds(transformedLocantIndex) - 2
+                        availableBonds(transformedLocantIndex + 1) = availableBonds(transformedLocantIndex + 1) - 2
+                    Case Else
+                        ' find appropriate functional group and deduct according to first level children
+                        For functionalGroupIndex = 0 To functionalGroupDefinitions.Length - 1
+                            If functionalGroupDefinitions(functionalGroupIndex).type = alkaneBase.simpleSubstituents(simpleSubstituentIndex).type Then
+                                For childIndex = 0 To functionalGroupDefinitions(functionalGroupIndex).children.Length - 1
+                                    availableBonds(transformedLocantIndex) = availableBonds(transformedLocantIndex) - functionalGroupDefinitions(functionalGroupIndex).children(childIndex).bondType
+                                Next
+                            End If
+                        Next
+                End Select
+            Next
+        Next
+
+        ' complex substituents
+        For complexSubstituentIndex = 0 To alkaneBase.complexSubstituents.Length - 1
+            For locantIndex = 0 To alkaneBase.complexSubstituents(complexSubstituentIndex).locants.Length - 1
+                transformedLocantIndex = CType(alkaneBase.complexSubstituents(complexSubstituentIndex).locants(locantIndex), Integer) - 1
+                availableBonds(transformedLocantIndex) = availableBonds(transformedLocantIndex) - 1
+            Next
+        Next
+
+        ' if any available bonds negative
+        For bondIndex = 0 To availableBonds.Length - 1
+            If availableBonds(bondIndex) < 0 Then
+                alkaneBase.isError = True
+                alkaneBase.errorMessage = "the name """ & organicNameString & """ is not valid" & Environment.NewLine _
+                    & organicNameString & Environment.NewLine _
+                    & "^" & Environment.NewLine _
+                    & "carbon at locant " & (bondIndex + 1) & " overloaded with " & (4 + availableBonds(bondIndex) * -1) & " bonds (carbon valency: 4)"
+                Return alkaneBase
+            End If
+        Next
+
         Return alkaneBase
 
     End Function
@@ -1059,12 +1189,12 @@ Module IUPACParser
     ''' true and compoundTree.errorMessage will contain the error message.
     ''' </returns>
     ''' <remarks>An ASTRoot structure representing the parsed organicCompound</remarks>
-    Public Function generateAST(ByVal organicNameString As String, ByVal organicNameTokens As Token(), ByVal tokenDefinitions As TokenDefinition()) As ASTRoot
+    Public Function generateAST(ByVal organicNameString As String, ByVal organicNameTokens As Token(), ByVal tokenDefinitions As TokenDefinition(), ByVal functionalGroupDefinitions As FunctionalGroupDefinition()) As ASTRoot
         ' create root
         Dim ast As ASTRoot
         ast.organicName = organicNameString
         ' call generation function 
-        ast.compoundTree = generateASTAlkaneBase(organicNameString, organicNameTokens, True, {}, tokenDefinitions)
+        ast.compoundTree = generateASTAlkaneBase(organicNameString, organicNameTokens, True, {}, tokenDefinitions, functionalGroupDefinitions)
         Return ast
     End Function
 
@@ -1125,7 +1255,6 @@ Module IUPACParser
 
         Return definitions
     End Function
-
 
     ''' <summary>
     ''' Given a singular token definition as an XML node and all the token definitions in XML format, return a TokenDefinition

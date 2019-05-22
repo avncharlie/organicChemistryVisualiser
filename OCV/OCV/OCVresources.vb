@@ -2,6 +2,8 @@
     Public startupFolder As String = System.AppDomain.CurrentDomain.BaseDirectory & "resources\"
     Public tokenDefinitionsFile As String = startupFolder & "tokens.xml"
     Public functionalGroupDefinitionsFile As String = startupFolder & "functionalGroups.xml"
+    Public iconPath As String = startupFolder & "carbonRings.ico"
+    Public examplesPath As String = startupFolder & "examples.xml"
 
     Public scale As Double = 1
 

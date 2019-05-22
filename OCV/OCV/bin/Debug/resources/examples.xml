@@ -1,0 +1,12 @@
+<examples>
+  <example displayName="benzene">cyclohex-1,3,5-triene</example>
+  <example displayName="TNT">1-methyl-2,4,6-trinitrocyclohex-1,3,5-triene</example>
+  <example displayName="citric acid">3-(1-carboxymethyl)pentan-3-ol-1,5-dioic acid</example>
+  <example displayName="grain alcohol">ethan-1-ol</example>
+  <example displayName="rubbing alcohol">propan-2-ol</example>
+  <example displayName="acetone">propane-2-one</example>
+  <example displayName="cycloalkane example">1-cyclopropyl-2-cyclobutyl-3-cyclopentyl-4-cyclohexyl-5-cycloheptyl-6-cyclooctyl-7-cyclononyl-8-cyclodecyl-9-cycloundecyl-10-cyclododecylcyclodecane</example>
+  <example displayName="complex 1">1,2,3,4,5,6-hexa(cyclohex-1,3,5-trienyl)cyclohex-1,3,5-triene</example>"
+  <example displayName="complex 2">1,4,7-tri(10-carboxy-2-cyclopropyl-3-fluoro-7-nitrodec-4,8-diynyl)cyclononane</example>
+  <example displayName="complex 3">2,4,6-trihexyl-1,3,5-tri(7,5-di(5-cyclobutyl10-carboxy-6-nitrodecan-3,8-diynyl)cyclodecanyl)cyclohexane</example>
+</examples>

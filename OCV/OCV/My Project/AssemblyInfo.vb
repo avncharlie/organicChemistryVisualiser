@@ -11,10 +11,10 @@ Imports System.Windows
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("WpfApplication1")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("WpfApplication1")> 
+<Assembly: AssemblyTitle("Organic Chemistry Visualiser")> 
+<Assembly: AssemblyDescription("A utility to visualise organic compounds")> 
+<Assembly: AssemblyCompany("Created by Alvin Charles, https://github.com/avncharlie")> 
+<Assembly: AssemblyProduct("Organic Chemistry Visualiser")> 
 <Assembly: AssemblyCopyright("Copyright @  2018")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>

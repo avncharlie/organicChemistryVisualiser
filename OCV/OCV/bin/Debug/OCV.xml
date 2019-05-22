@@ -6,7 +6,15 @@ OCV
 </name>
 </assembly>
 <members>
-<member name="M:OrganicChemistryVisualiser.Application.InitializeComponent">
+<member name="M:OrganicChemistryVisualiser.MainWindow.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:OrganicChemistryVisualiser.MainWindow">
+	<summary>
+MainWindow
+</summary>
+</member><member name="M:OrganicChemistryVisualiser.Application.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
@@ -18,20 +26,25 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.InitializeComponent">
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.copyAST(OrganicChemistryVisualiser.IUPACParser.ASTAlkaneBase)">
 	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:OrganicChemistryVisualiser.MainWindow">
-	<summary>
-MainWindow
-</summary>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateASTAlkaneBase(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],System.Boolean,System.String[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[]@)">
+ Given an AST as an ASTAlkaneBase, return a copy of the AST. Fully copies all arrays present in the original AST so there
+ are no unwanted links between the original and the copy.
+ </summary>
+	<param name="origAST">The AST to copy</param>
+	<returns>A copy of origAST</returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateASTAlkaneBase(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],System.Boolean,System.String[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[]@,OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[]@)">
 	<summary>
  Given a the name of an organic compound or substituent fragment, an array of tokens representing this name, an array of 
  token definitions, an indication if the given name contains the main chain of the compound and the locants of the chain
  if it isn't, return an ASTAlkaneBase structure representing this object. Deals with nested main chains (complex substituents)
- recursively. Doesn't initialise the branches variable, used while rendering
+ recursively. Doesn't initialise the branches variable, used while rendering.
+ 1000 line function justification: In reality, parsing tokens and generating an AST  would be done using a finite state 
+ automata. This function was implemented without a finite state automata due to the author's lack of knowledge regarding
+ its implementation. This resulted in a large amount of code with many conditional and repetition control structures used
+ in this function. While the function is a 1000 lines long, it still only does one logical task - parse a list of tokens 
+ into an AST.
  </summary>
 	<param name="organicNameString">
  A string containing the name of the organic compound (used in error messages). In the case of a complex substituent, the
@@ -51,7 +64,7 @@ MainWindow
  present in the errorMessage variable
  </returns>
 	<remarks>Should be called by the generateAST function, not by the user</remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateAST(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[])">
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateAST(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[],OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[])">
 	<summary>
  Generates an Abstract Syntax Tree in the format of an ASTRoot structure for a given organicCompound
  </summary>
@@ -178,6 +191,82 @@ MainWindow
  An array of FunctionalGroupPoints representing the given simpleSubstituents. The array only contain one element unless the
  substituent specified had more than one locant position</returns>
 	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.rotatePoint(System.Windows.Point,System.Windows.Point,System.Double)">
+	<summary>
+ Given a point to rotate, an origin point and an angle, returns the point rotated around the origin by the angle
+ in a clockwise rotation.
+ </summary>
+	<param name="point">The point to be rotated</param>
+	<param name="origin">Contains the coordinates the point should be rotated around</param>
+	<param name="angle">The angle in radians to rotate the point by, as a double</param>
+	<returns>The point rotated according to the given specifications</returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.translatePoint(System.Windows.Point,System.Windows.Point)">
+	<summary>
+ Given a point to translate and a vector in the form (x vector, y vector) as a point, translate the point by the vector.
+ </summary>
+	<param name="origPoint">The point to be translated</param>
+	<param name="vector">A point in the form (x vector, y vector) to translate origPoint by</param>
+	<returns>The point translated according to the given specifications</returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.rotateOrganicCompountPoints(OrganicChemistryVisualiser.IUPACRenderer.OrganicCompoundPoints@,System.Windows.Point,System.Double)">
+	<summary>
+ Given an OrganicCompoundPoints, an origin and an angle, rotate the OrganicCompoundPoints around the origin by the angle
+ in a clockwise direction.
+ </summary>
+	<param name="ocPoints">The OrganicCompoundPoints to rotate. Passed byref to save memory</param>
+	<param name="origin">The point to rotate ocPoints by</param>
+	<param name="angle">The angle in radians to rotate ocPoints by in a clockwise direction</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.translateOrganicCompoundPoints(OrganicChemistryVisualiser.IUPACRenderer.OrganicCompoundPoints@,System.Windows.Point)">
+	<summary>
+ Given an OrganicCompoundPoints and a vector, translate the OrganicCompoundPoints by the vector.
+ </summary>
+	<param name="ocPoints">The OrganicCompoundPoints to be translated. Passed byref to save memory</param>
+	<param name="vector">The vector in the form (x vector, y vector) to translate ocPoints by</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.renderAST(OrganicChemistryVisualiser.IUPACParser.ASTAlkaneBase@,OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[],System.Double,System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean,System.Double,System.Double,System.Boolean)">
+	<summary>
+ Given an AST, return an OrganicCompoundPoints function containing a populated canvas representing the given AST.
+ 1000 line function justification: This function performs one logical task - given a Abstract Syntax Tree, it returns
+ an OrganicCompountPoints structure visualising this tree. The component parts of this problem are split into other
+ functions and subroutines that are continually used throughout the function - primarily: 
+   translateOrganicCompoundPoints, rotateOrganicCompountPoints, translatePoint, rotatePoint.
+ All the other functions in this page are also called through this function, and big parts of this problem, such as
+ generating simple substituents.
+ </summary>
+	<param name="ast">The AST to be visualised</param>
+	<param name="functionalGroupDefinitions">An array of FunctionalGroupDefinitions</param>
+	<param name="scale">
+ A double containing the scale of the output. 1 is default, other scales may seem off-kilter. Is optional.
+ </param>
+	<param name="alkaneSpacing">A double containing the x distance between two points in an alkane chain. Is optional.</param>
+	<param name="alkaneRise">A double containing the y height difference between two points in an alkane chain. Is optional.</param>
+	<param name="canvasOffsetX">
+ A double containing how much x offset from the top of the canvas the generated elements should have. Is optional.
+ </param>
+	<param name="canvasOffsetY">
+ A double containing how much y offset from the top of the canvas the generated elements should have. Is optional.
+ </param>
+	<param name="alkaneStartsRising">
+ A boolean, set to true if the alkane chain starts rising from the first carbon-carbon bond. Is optional.
+ </param>
+	<param name="alkeEneYneLineXOffsetPercentage">
+ A double containing a percentage from 0 to 1. This percentage of the alkaneSpacing value is used to offset the x distance
+ between a single bond and a double/triple bond line. Is optional.
+ </param>
+	<param name="alkEneYneLineYOffsetPercentage">
+ A double containing a percentage from 0 to 1. This percentage of the alkaneRise value is used to offset the y distance
+ between a single bond and a double/triple bond line. Is optional.
+ </param>
+	<param name="firstCall">
+ A boolean to be set to true if this is the first call of the function. Used to differentiate between the first call and other
+ recursive calls.
+ </param>
+	<returns>
+ An OrganicCompoundPoints object, which contains a populated canvas object containing the visualisation of the ast.
+ </returns>
+	<remarks>The exportCanvasAsImage function can be used to export the canvas as an image.</remarks>
 </member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.exportCanvasAsImage(System.Windows.Controls.Canvas,System.String,System.String)">
 	<summary>
  Given a canvas element, a filetype of either png or jpg, and a file path, export the canvas as an image
@@ -226,12 +315,41 @@ MainWindow
  Module used to define the properties that are available in the My Namespace for WPF
  </summary>
 	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.Window_Loaded(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called on form load. Sets the window icon, disables exporting the empty canvas and generates tokens and functional group definitions
+ Also initialises examples
+ </summary>
+	<param name="sender">Sent automatically by system</param>
+	<param name="e">Sent automatically by system</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.handleExampleClick(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Handles all click events from examples. Searches through examples for matching example and parses and displays it
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.parseAndDisplay(System.String)">
 	<summary>
  Given an organicName, uses the functions and subroutines present in IUPACParser and IUPACRenderer to display either an error for an incorrect name
  or a rendered picture of the compound
  </summary>
 	<param name="organicName">A string containing the name to be rendered</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.saveToFile(System.String,System.String)">
+	<summary>
+ Given a file path and a name, save the name to the file
+ </summary>
+	<param name="filePath">A string containing the file path to save to</param>
+	<param name="name">The name to be saved to the file</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.openFile(System.String)">
+	<summary>
+ Given a file path, load the name present in the file
+ </summary>
+	<param name="filePath">The file path of the file to be read</param>
+	<returns>A string containing the name present in the file</returns>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
@@ -253,6 +371,36 @@ MainWindow
  </summary>
 	<param name="sender">Handled by system - will be textBox_userInput</param>
 	<param name="e">Handled by system - will a System.Windows.Input.KeyEventArgs with the key a user entered (keys that are not enter are ignored)</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_export_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when user clicks on the export menu item. Opens a file dialog and exports the loaded compound as an image into a file location
+ of the users choice in either PNG or JPG format.
+ </summary>
+	<param name="sender">Handled by system</param>
+	<param name="e">Handled by system</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_exit_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when user clicks on the exit menu item. Exits the application.
+ </summary>
+	<param name="sender">Handled by system</param>
+	<param name="e">Handled by system</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_save_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when user clicks on the save menu item. Opens a file dialog and saves the loaded compound into a file of the users choice.
+ </summary>
+	<param name="sender">Handled by system</param>
+	<param name="e">Handled by system</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_load_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when the user clicks on the open menu item. Opens a file dialog for the user to choose a file to open and loads the name
+ stored in this file
+ </summary>
+	<param name="sender">Handled by system</param>
+	<param name="e">Handled by system</param>
 	<remarks></remarks>
 </member>
 </members>
