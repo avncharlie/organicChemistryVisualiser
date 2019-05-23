@@ -139,7 +139,25 @@ of the AST structure, not how it is actually represented internally
 
 ================================================================================
 4. Drawing organic names
-Drawing organic names is done with  TODOOOOOOO
+Drawing organic names can be broken down to these main parts
+   - drawing the main chain
+   - drawing the simple substituents (functional groups)
+   - recursing to draw complex substituents
+   - aligning, rotating and positioning all drawn subsituents to attach
+     correctly to the main chain
+
+Different data structures are used to store information about point locations
+and other relavent information regarding each point. The generation of the
+display of the compound only generates point information and does not actually
+generate any Canvas elements.
+
+The generation of Canvas elements is only done at the very end of the rendering
+process. This is done as due to the recursive nature of the drawing algorithm,
+points may be rotated, translated or otherwise modified after they are set for
+the first time. In a sense, the process of generating the Canvas elements at
+the end of the drawing process is like 'joining the dots'.
+
+The Canvas can be exported as an image for other use after rendering.
 
 
 ================================================================================

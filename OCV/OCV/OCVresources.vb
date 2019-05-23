@@ -5,17 +5,17 @@
     Public iconPath As String = startupFolder & "carbonRings.ico"
     Public examplesPath As String = startupFolder & "examples.xml"
 
-    Public scale As Double = 1
+    Public Const scale As Double = 1
 
-    Public alkaneSpacing As Double = 30
-    Public alkaneRise As Double = 17
+    Public Const alkaneSpacing As Double = 30
+    Public Const alkaneRise As Double = 17
 
-    Public alkeEneYneLineXOffsetPercentage As Double = 3 / 30   ' 0.1
-    Public alkEneYneLineYOffsetPercentage As Double = 5 / 17    ' 0.294117...
+    Public Const alkeEneYneLineXOffsetPercentage As Double = 3 / 30   ' 0.1
+    Public Const alkEneYneLineYOffsetPercentage As Double = 5 / 17    ' 0.294117...
 
     Public canvasOffset As Double() = {30, 30}
 
-    Public alkaneStartsRising As Boolean = False
+    Public Const alkaneStartsRising As Boolean = False
 
     ' sorted from first preference to last (1 - 6)
     ' assumed from 0 degrees being east and pi/2 degrees being north

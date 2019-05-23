@@ -58,6 +58,7 @@ Application
  If isMainChain, empty list should be given (e.g. {})
  </param>
 	<param name="tokenDefinitions">An array of (generated) TokenDefinitions</param>
+	<param name="functionalGroupDefinitions">An array of (generated) FunctionalGroupDefinitions</param>
 	<returns>
  If valid name, return an ASTAlkaneBase structure representing name
  If invalid name, return an ASTAlkaneBase structure with the isError boolean flag set as True with a generated error message
@@ -135,12 +136,12 @@ Application
 	<param name="points">the array of Points to be converted</param>
 	<returns>a polyline representing the array of Points passed in</returns>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.bubbleSortDescending(System.Int32[])">
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.bubbleSortAscending(System.Int32[])">
 	<summary>
  Helper function used to sort an integer array. Uses the bubble sort algorithm
  </summary>
 	<param name="arr">the integer array to be sorted</param>
-	<returns>an integer array containing the elements in the given integer array sorted in descending order</returns>
+	<returns>an integer array containing the elements in the given integer array sorted in ascending order</returns>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.createFunctionalGroupChild(OrganicChemistryVisualiser.IUPACParser.FunctionalGroupChild[]@,OrganicChemistryVisualiser.IUPACRenderer.FunctionalGroupPoints@,OrganicChemistryVisualiser.IUPACParser.ConnectingBranches@,System.Windows.Point,System.Double,System.Double[],System.Double,System.Double)">
 	<summary>
@@ -233,7 +234,7 @@ Application
  functions and subroutines that are continually used throughout the function - primarily: 
    translateOrganicCompoundPoints, rotateOrganicCompountPoints, translatePoint, rotatePoint.
  All the other functions in this page are also called through this function, and big parts of this problem, such as
- generating simple substituents.
+ generating simple substituents are done using other functions.
  </summary>
 	<param name="ast">The AST to be visualised</param>
 	<param name="functionalGroupDefinitions">An array of FunctionalGroupDefinitions</param>
@@ -315,7 +316,7 @@ Application
  Module used to define the properties that are available in the My Namespace for WPF
  </summary>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.Window_Loaded(System.Object,System.Windows.RoutedEventArgs)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.windowLoad(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Called on form load. Sets the window icon, disables exporting the empty canvas and generates tokens and functional group definitions
  Also initialises examples
@@ -323,12 +324,20 @@ Application
 	<param name="sender">Sent automatically by system</param>
 	<param name="e">Sent automatically by system</param>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.handleExampleClick(System.Object,System.Windows.RoutedEventArgs)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.handleExampleMenuItemClick(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Handles all click events from examples. Searches through examples for matching example and parses and displays it
  </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.nameLengthValidation(System.String)">
+	<summary>
+ Given an name to verify, return false if the name is less than 5 characters.
+ This is as no organic name is less than 5 characters.
+ </summary>
+	<param name="name">The name to validate</param>
+	<returns>A boolean which is set to True if the name is valid and False if it is not</returns>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.parseAndDisplay(System.String)">
 	<summary>
@@ -355,52 +364,52 @@ Application
 	<summary>
  Sets the placeholder text 'Enter IUPAC name' to the user input textbox (textBox_userInput) when it loses focus. Also makes the text italic and gray.
  </summary>
-	<param name="sender">TextBox - sent automatically</param>
-	<param name="e">System.Windows.RoutedEventArgs - sent automatically</param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_removePlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Removes the placeholder text and all styling from it for normal use when clicked on by user.
  </summary>
-	<param name="sender">TextBox - sent automatically</param>
-	<param name="e">System.Windows.RoutedEventArgs - sent automatically</param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_KeyDown(System.Object,System.Windows.Input.KeyEventArgs)">
 	<summary>
  When a name is entered to textBox_userInput and the user presses enter, this subroutine calls parseAndDisplay with the entered name
  </summary>
-	<param name="sender">Handled by system - will be textBox_userInput</param>
-	<param name="e">Handled by system - will a System.Windows.Input.KeyEventArgs with the key a user entered (keys that are not enter are ignored)</param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_export_Click(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Called when user clicks on the export menu item. Opens a file dialog and exports the loaded compound as an image into a file location
  of the users choice in either PNG or JPG format.
  </summary>
-	<param name="sender">Handled by system</param>
-	<param name="e">Handled by system</param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_exit_Click(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Called when user clicks on the exit menu item. Exits the application.
  </summary>
-	<param name="sender">Handled by system</param>
-	<param name="e">Handled by system</param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_save_Click(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Called when user clicks on the save menu item. Opens a file dialog and saves the loaded compound into a file of the users choice.
  </summary>
-	<param name="sender">Handled by system</param>
-	<param name="e">Handled by system</param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_load_Click(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Called when the user clicks on the open menu item. Opens a file dialog for the user to choose a file to open and loads the name
  stored in this file
  </summary>
-	<param name="sender">Handled by system</param>
-	<param name="e">Handled by system</param>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
 </member>
 </members>

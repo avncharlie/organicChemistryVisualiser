@@ -1,4 +1,22 @@
-<functionalGroups>  
+<functionalGroups>
+  <functionalGroup type="acetyl">
+    <child>
+      <representor></representor>
+      <bondType>1</bondType>
+      <colour>#0ea528</colour>
+      <child>
+        <representor> O</representor>
+        <bondType>2</bondType>
+        <colour>#0ea528</colour>
+      </child>
+      <child>
+        <representor></representor>
+        <bondType>1</bondType>
+        <colour>#0ea528</colour>
+      </child>
+    </child>
+  </functionalGroup>
+
   <functionalGroup type="fluoro">
     <child>
       <representor>F</representor>

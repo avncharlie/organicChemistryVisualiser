@@ -48,26 +48,29 @@
     ''' Helper function used to sort an integer array. Uses the bubble sort algorithm
     ''' </summary>
     ''' <param name="arr">the integer array to be sorted</param>
-    ''' <returns>an integer array containing the elements in the given integer array sorted in descending order</returns>
+    ''' <returns>an integer array containing the elements in the given integer array sorted in ascending order</returns>
     ''' <remarks></remarks>
-    Private Function bubbleSortDescending(ByVal arr As Integer()) As Integer()
+    Private Function bubbleSortAscending(ByVal arr As Integer()) As Integer()
         Dim unsortedBoundary = arr.Length - 1
         Dim temporary As Integer
+        Dim tempIndex As Integer
         Dim modifiedArrayThisRun As Boolean
+        modifiedArrayThisRun = True
 
         ' if array has not been modified in a run, that means it is sorted
-        While unsortedBoundary > 0 Or modifiedArrayThisRun = True
+        While modifiedArrayThisRun = True
             modifiedArrayThisRun = False
-            ' loop to unsortedBoundary - 1 as condiition in the loop looks ahead item
-            For index = 0 To unsortedBoundary - 1
-                ' if current element is less than the next element, swap
-                If arr(index) > arr(index + 1) Then
-                    temporary = arr(index)
-                    arr(index) = arr(index + 1)
-                    arr(index + 1) = temporary
+            tempIndex = 0
+            While tempIndex < unsortedBoundary
+                ' while current element is less than the next element, swap
+                If arr(tempIndex) > arr(tempIndex + 1) Then
+                    temporary = arr(tempIndex)
+                    arr(tempIndex) = arr(tempIndex + 1)
+                    arr(tempIndex + 1) = temporary
                     modifiedArrayThisRun = True
                 End If
-            Next
+                tempIndex = tempIndex + 1
+            End While
             ' decrease unsortedBoundary as highest element will have bubbled to top
             unsortedBoundary = unsortedBoundary - 1
         End While
@@ -119,7 +122,7 @@
         For childIndex = 0 To children.Length - 1
             ' --- select branch to be used and mark it as taken on parent and child---
             ' sort branches so last branch will be least preferred branch
-            parentBranches.takenBranches = bubbleSortDescending(parentBranches.takenBranches)
+            parentBranches.takenBranches = bubbleSortAscending(parentBranches.takenBranches)
 
             ' branch to be used will be highest possible preferred branch, except for special case methane in which branch to be used = 1
             Dim branch As Integer
@@ -462,7 +465,7 @@
     ''' functions and subroutines that are continually used throughout the function - primarily: 
     '''   translateOrganicCompoundPoints, rotateOrganicCompountPoints, translatePoint, rotatePoint.
     ''' All the other functions in this page are also called through this function, and big parts of this problem, such as
-    ''' generating simple substituents.
+    ''' generating simple substituents are done using other functions.
     ''' </summary>
     ''' <param name="ast">The AST to be visualised</param>
     ''' <param name="functionalGroupDefinitions">An array of FunctionalGroupDefinitions</param>
@@ -837,7 +840,7 @@
                 ' --- finding available branch on parent ---
 
                 ' sort branches so last branch will be least preferred branch
-                ast.branches(locant - 1).takenBranches = bubbleSortDescending(ast.branches(locant - 1).takenBranches)
+                ast.branches(locant - 1).takenBranches = bubbleSortAscending(ast.branches(locant - 1).takenBranches)
                 ' branch to be used will be highest possible preferred branch, except for special case methane in which branch to be used = 1
                 Dim branch As Integer
                 branch = -1

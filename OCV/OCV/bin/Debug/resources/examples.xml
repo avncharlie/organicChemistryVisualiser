@@ -1,12 +1,15 @@
 <examples>
-  <example displayName="benzene">cyclohex-1,3,5-triene</example>
   <example displayName="TNT">1-methyl-2,4,6-trinitrocyclohex-1,3,5-triene</example>
-  <example displayName="citric acid">3-(1-carboxymethyl)pentan-3-ol-1,5-dioic acid</example>
-  <example displayName="grain alcohol">ethan-1-ol</example>
-  <example displayName="rubbing alcohol">propan-2-ol</example>
-  <example displayName="acetone">propane-2-one</example>
-  <example displayName="cycloalkane example">1-cyclopropyl-2-cyclobutyl-3-cyclopentyl-4-cyclohexyl-5-cycloheptyl-6-cyclooctyl-7-cyclononyl-8-cyclodecyl-9-cycloundecyl-10-cyclododecylcyclodecane</example>
-  <example displayName="complex 1">1,2,3,4,5,6-hexa(cyclohex-1,3,5-trienyl)cyclohex-1,3,5-triene</example>"
-  <example displayName="complex 2">1,4,7-tri(10-carboxy-2-cyclopropyl-3-fluoro-7-nitrodec-4,8-diynyl)cyclononane</example>
-  <example displayName="complex 3">2,4,6-trihexyl-1,3,5-tri(7,5-di(5-cyclobutyl10-carboxy-6-nitrodecan-3,8-diynyl)cyclodecanyl)cyclohexane</example>
+  <example displayName="Dopamine">4-(2-aminoethyl)cyclohex-1,3,5-trien-1,2-diol</example>"
+  <example displayName="Ibuprofen">2-(4-(2-methylpropyl)cyclohex-1,3,5-triene)propan-1-oic acid</example>
+  <example displayName="Amphetamine">1-cyclohex-1,3,5-trienylpropan-2-amine</example>
+  <example displayName="Citric Acid">3-(1-carboxymethyl)pentan-3-ol-1,5-dioic acid</example>
+  <example displayName="Drinking Alcohol">ethan-1-ol</example>
+  <example displayName="Rubbing Alcohol">propan-2-ol</example>
+  <example displayName="Acetone">propane-2-one</example>
+  <example displayName="Benzene">cyclohex-1,3,5-triene</example>
+  <example displayName="Cycloalkanes Example">1-cyclopropyl-2-cyclobutyl-3-cyclopentyl-4-cyclohexyl-5-cycloheptyl-6-cyclooctyl-7-cyclononyl-8-cyclodecyl-9-cycloundecyl-10-cyclododecylcyclodecane</example>
+  <example displayName="Complex Example 1">1,2,3,4,5,6-hexa(cyclohex-1,3,5-trienyl)cyclohex-1,3,5-triene</example>
+  <example displayName="Complex Example 2">1,4,7-tri(10-carboxy-2-cyclopropyl-3-fluoro-7-nitrodec-4,8-diynyl)cyclononane</example>
+  <example displayName="Complex Example 3">2,4,6-trihexyl-1,3,5-tri(7,5-di(5-cyclobutyl10-carboxy-6-nitrodecan-3,8-diynyl)cyclodecanyl)cyclohexane</example>
 </examples>

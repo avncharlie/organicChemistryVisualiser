@@ -118,6 +118,7 @@ Module IUPACParser
     ''' If isMainChain, empty list should be given (e.g. {})
     ''' </param>
     ''' <param name="tokenDefinitions">An array of (generated) TokenDefinitions</param>
+    ''' <param name="functionalGroupDefinitions">An array of (generated) FunctionalGroupDefinitions</param>
     ''' <returns>
     ''' If valid name, return an ASTAlkaneBase structure representing name
     ''' If invalid name, return an ASTAlkaneBase structure with the isError boolean flag set as True with a generated error message

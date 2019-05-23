@@ -1,7 +1,4 @@
 <!--
-
-amides? others?
-
 ████████╗ ██████╗ ██╗  ██╗███████╗███╗   ██╗███████╗   ██╗  ██╗███╗   ███╗██╗     
 ╚══██╔══╝██╔═══██╗██║ ██╔╝██╔════╝████╗  ██║██╔════╝   ╚██╗██╔╝████╗ ████║██║     
    ██║   ██║   ██║█████╔╝ █████╗  ██╔██╗ ██║███████╗    ╚███╔╝ ██╔████╔██║██║     
@@ -230,6 +227,10 @@ organic name.
 
             <functionalGroupSubstituent identification="nitro">
                 <type>nitro</type>
+            </functionalGroupSubstituent>
+
+            <functionalGroupSubstituent identification="acetyl">
+                <type>acetyl</type>
             </functionalGroupSubstituent>
 
             <functionalGroupSubstituent identification="fluoro">
