@@ -17,13 +17,17 @@
     Private Sub windowLoad(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         ' set icon
         Dim iconUri As New Uri(OCVresources.iconPath)
-        frm_mainWindow.Icon = BitmapFrame.Create(iconUri)
+        frm_mainWindow.Icon = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(My.Resources.icon.GetHbitmap(), _
+                                                                                           IntPtr.Zero, Int32Rect.Empty, _
+                                                                                           BitmapSizeOptions.FromEmptyOptions())
 
         ' disable export when nothing to export
         mi_export.IsEnabled = False
 
         ' load examples
-        examples = XElement.Load(OCVresources.examplesPath)
+        Dim examplesResource As New XDocument()
+        examplesResource = XDocument.Load(New System.IO.StringReader(My.Resources.examples))
+        examples = examplesResource.Root
 
         ' generate examples menu items
         For Each example In examples.Elements()
@@ -35,8 +39,13 @@
         Next
 
         ' generate token and functional group definitions
-        tokenDefinitions = IUPACParser.generateTokenDefinitions(XElement.Load(OCVresources.tokenDefinitionsFile))
-        functionalGroupDefinitions = IUPACParser.generateFunctionalGroupDefinitions(XElement.Load(OCVresources.functionalGroupDefinitionsFile))
+        Dim tokenResource As New XDocument()
+        tokenResource = XDocument.Load(New System.IO.StringReader(My.Resources.tokens))
+        tokenDefinitions = IUPACParser.generateTokenDefinitions(tokenResource.Root)
+
+        Dim functionalGroupDefinitionsResource As New XDocument()
+        functionalGroupDefinitionsResource = XDocument.Load(New System.IO.StringReader(My.Resources.functionalGroups))
+        functionalGroupDefinitions = IUPACParser.generateFunctionalGroupDefinitions(functionalGroupDefinitionsResource.Root)
     End Sub
 
     ''' <summary>

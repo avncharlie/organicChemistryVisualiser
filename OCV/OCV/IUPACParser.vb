@@ -1121,6 +1121,10 @@ Module IUPACParser
             availableBonds(0) = 3
             availableBonds(availableBonds.Length - 1) = 3
         End If
+        ' exception for methane
+        If alkaneBase.length = 1 Then
+            availableBonds(0) = 4
+        End If
 
         ' functional groups
         Dim transformedLocantIndex As Integer

@@ -11,3 +11,16 @@
 \\Mac\Home\Documents\Quick Access\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.exe
 \\Mac\Home\Documents\Quick Access\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.xml
 \\Mac\Home\Documents\Quick Access\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.pdb
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.exe
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.xml
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.pdb
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\bin\Release\OCV.exe
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\bin\Release\OCV.pdb
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\bin\Release\OCV.xml
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\frm_mainWindow.baml
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\frm_mainWindow.g.vb
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\Application.g.vb
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV_MarkupCompile.cache
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.g.resources
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OrganicChemistryVisualiser.Resources.resources
+\\Mac\Home\Documents\Code\Visual Basic\organicChemistryVisualiser\OCV\OCV\obj\x86\Release\OCV.vbproj.GenerateResource.Cache

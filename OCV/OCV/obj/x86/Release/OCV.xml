@@ -26,109 +26,101 @@ Application Entry Point.
 	<summary>
 Application
 </summary>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.copyAST(OrganicChemistryVisualiser.IUPACParser.ASTAlkaneBase)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.windowLoad(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
- Given an AST as an ASTAlkaneBase, return a copy of the AST. Fully copies all arrays present in the original AST so there
- are no unwanted links between the original and the copy.
+ Called on form load. Sets the window icon, disables exporting the empty canvas and generates tokens and functional group definitions
+ Also initialises examples
  </summary>
-	<param name="origAST">The AST to copy</param>
-	<returns>A copy of origAST</returns>
+	<param name="sender">Sent automatically by system</param>
+	<param name="e">Sent automatically by system</param>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateASTAlkaneBase(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],System.Boolean,System.String[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[]@,OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[]@)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.handleExampleMenuItemClick(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
- Given a the name of an organic compound or substituent fragment, an array of tokens representing this name, an array of 
- token definitions, an indication if the given name contains the main chain of the compound and the locants of the chain
- if it isn't, return an ASTAlkaneBase structure representing this object. Deals with nested main chains (complex substituents)
- recursively. Doesn't initialise the branches variable, used while rendering.
- 1000 line function justification: In reality, parsing tokens and generating an AST  would be done using a finite state 
- automata. This function was implemented without a finite state automata due to the author's lack of knowledge regarding
- its implementation. This resulted in a large amount of code with many conditional and repetition control structures used
- in this function. While the function is a 1000 lines long, it still only does one logical task - parse a list of tokens 
- into an AST.
+ Handles all click events from examples. Searches through examples for matching example and parses and displays it
  </summary>
-	<param name="organicNameString">
- A string containing the name of the organic compound (used in error messages). In the case of a complex substituent, the
- complex substituent fragment is expected (e.g but-1-enyl)
- </param>
-	<param name="nameTokens">An array of Token objects representing the name to be parsed</param>
-	<param name="isMainChain">A boolean that is true if the given name contains the main chain, false if not</param>
-	<param name="locants">
- An array containing the locants of the given complex substituent if not isMainChain
- e.g. for 2-butyl, locants = {2}
- If isMainChain, empty list should be given (e.g. {})
- </param>
-	<param name="tokenDefinitions">An array of (generated) TokenDefinitions</param>
-	<param name="functionalGroupDefinitions">An array of (generated) FunctionalGroupDefinitions</param>
-	<returns>
- If valid name, return an ASTAlkaneBase structure representing name
- If invalid name, return an ASTAlkaneBase structure with the isError boolean flag set as True with a generated error message
- present in the errorMessage variable
- </returns>
-	<remarks>Should be called by the generateAST function, not by the user</remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateAST(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[],OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[])">
-	<summary>
- Generates an Abstract Syntax Tree in the format of an ASTRoot structure for a given organicCompound
- </summary>
-	<param name="organicNameString">A string containing the name of the compound to be parsed</param>
-	<param name="organicNameTokens">
- An array of Token structures representing the compound to be parsed. Can be generated with the generateTokens 
- function in this module.
- </param>
-	<param name="tokenDefinitions">
- An array of TokenDefinition structures representing the definitions of tokens present in the organicNameTokens array.
- Can be generated with the generateTokenDefinitions function in this module.
- </param>
-	<returns>
- Returns an ASTRoot structure representing the organicCompound. If the name is invalid, compoundTree.isError will be 
- true and compoundTree.errorMessage will contain the error message.
- </returns>
-	<remarks>An ASTRoot structure representing the parsed organicCompound</remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateFunctionalGroupChild(System.Xml.Linq.XElement)">
-	<summary>
- Generates a FunctionalGroupChild from a XElement the functional group is stored in. Can handle recursive cases.
- Doesn't initialise branches.
- </summary>
-	<param name="childXML">The XElement the child is stored in</param>
-	<returns></returns>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateFunctionalGroupDefinitions(System.Xml.Linq.XElement)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.nameLengthValidation(System.String)">
 	<summary>
- Given the XElement of the XMl file containing the functional group definitions, parses them into a list of FunctionalGroupDefinition
- structures. Can handle recursive cases.
+ Given an name to verify, return false if the name is less than 5 characters.
+ This is as no organic name is less than 5 characters.
  </summary>
-	<param name="allFunctionalGroupDefinitions">XElement containing functional group definitions file</param>
-	<returns>An array of FunctionalGroupDefinitions containing the definitions of the </returns>
+	<param name="name">The name to validate</param>
+	<returns>A boolean which is set to True if the name is valid and False if it is not</returns>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokenDefinition(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.parseAndDisplay(System.String)">
 	<summary>
- Given a singular token definition as an XML node and all the token definitions in XML format, return a TokenDefinition
- structure representing the token definition. Handles unpacking regexes and expanding contained tokens within other tokens
- recursively.
- For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
+ Given an organicName, uses the functions and subroutines present in IUPACParser and IUPACRenderer to display either an error for an incorrect name
+ or a rendered picture of the compound
  </summary>
-	<param name="tokenDefinitionXML">An XElement containing the token definition to be converted</param>
-	<param name="allTokenDefinitionsXML">An XElement containing all token definitions (used when tokenDefinitionXML contains other tokens)</param>
-	<returns>Returns a TokenDefinition representing tokenDefinitionXML</returns>
-	<remarks>Works for recursive definitions and expanded regexes.</remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokenDefinitions(System.Xml.Linq.XElement)">
+	<param name="organicName">A string containing the name to be rendered</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.saveToFile(System.String,System.String)">
 	<summary>
- Given a XElement containing all token definitions in XML format, return an array of TokenDefinitions detailing given tokens.
- For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
+ Given a file path and a name, save the name to the file
  </summary>
-	<param name="allTokenDefinitionsXML">An XElement containing all tokens to be converted into a TokenDefinitions</param>
-	<returns>An array of TokenDefinitions</returns>
-	<remarks>Uses the createTokenDefinition function to create singular TokenDefinitions</remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokens(System.String,OrganicChemistryVisualiser.IUPACParser.TokenDefinition[])">
+	<param name="filePath">A string containing the file path to save to</param>
+	<param name="name">The name to be saved to the file</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.openFile(System.String)">
 	<summary>
- Given an organicName and a tokenDefinition list, tokenise it, meaning convert the organic name into an array of Token structures.
- The token array is then verified. If any error is encountered, returns the error in the form of an array of a single Token where
- type="ERROR" and value contains the error details.
- For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
+ Given a file path, load the name present in the file
  </summary>
-	<param name="organicName">A string containing the organicName to be tokenised</param>
-	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
-	<returns>An array of Token structures representing the organic name OR an array containing a single token whose type is ERROR and value contains an error message.</returns>
-	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
+	<param name="filePath">The file path of the file to be read</param>
+	<returns>A string containing the name present in the file</returns>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Sets the placeholder text 'Enter IUPAC name' to the user input textbox (textBox_userInput) when it loses focus. Also makes the text italic and gray.
+ </summary>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_removePlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Removes the placeholder text and all styling from it for normal use when clicked on by user.
+ </summary>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_KeyDown(System.Object,System.Windows.Input.KeyEventArgs)">
+	<summary>
+ When a name is entered to textBox_userInput and the user presses enter, this subroutine calls parseAndDisplay with the entered name
+ </summary>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_export_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when user clicks on the export menu item. Opens a file dialog and exports the loaded compound as an image into a file location
+ of the users choice in either PNG or JPG format.
+ </summary>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_exit_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when user clicks on the exit menu item. Exits the application.
+ </summary>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_save_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when user clicks on the save menu item. Opens a file dialog and saves the loaded compound into a file of the users choice.
+ </summary>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_load_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Called when the user clicks on the open menu item. Opens a file dialog for the user to choose a file to open and loads the name
+ stored in this file
+ </summary>
+	<param name="sender">Reference to the control which called the subroutine</param>
+	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
+	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.generatePolylineFromPoints(System.Windows.Point[])">
 	<summary>
  Helper function used to convert an array of Points into a polyline
@@ -136,12 +128,12 @@ Application
 	<param name="points">the array of Points to be converted</param>
 	<returns>a polyline representing the array of Points passed in</returns>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.bubbleSortDescending(System.Int32[])">
+</member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.bubbleSortAscending(System.Int32[])">
 	<summary>
  Helper function used to sort an integer array. Uses the bubble sort algorithm
  </summary>
 	<param name="arr">the integer array to be sorted</param>
-	<returns>an integer array containing the elements in the given integer array sorted in descending order</returns>
+	<returns>an integer array containing the elements in the given integer array sorted in ascending order</returns>
 	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.IUPACRenderer.createFunctionalGroupChild(OrganicChemistryVisualiser.IUPACParser.FunctionalGroupChild[]@,OrganicChemistryVisualiser.IUPACRenderer.FunctionalGroupPoints@,OrganicChemistryVisualiser.IUPACParser.ConnectingBranches@,System.Windows.Point,System.Double,System.Double[],System.Double,System.Double)">
 	<summary>
@@ -277,19 +269,6 @@ Application
 	<param name="fileType">A string containing either 'png' or 'jpg' signifying whether the image should be exported in PNG or JPEG format</param>
 	<param name="filePath">The path the image should be exported to. Existing images with the same name will be overwritten</param>
 	<remarks></remarks>
-</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:OrganicChemistryVisualiser.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member><member name="P:OrganicChemistryVisualiser.My.MyWpfExtension.Application">
 	<summary>
  Returns the application object for the running application
@@ -316,93 +295,173 @@ Application
  Module used to define the properties that are available in the My Namespace for WPF
  </summary>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.windowLoad(System.Object,System.Windows.RoutedEventArgs)">
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.copyAST(OrganicChemistryVisualiser.IUPACParser.ASTAlkaneBase)">
 	<summary>
- Called on form load. Sets the window icon, disables exporting the empty canvas and generates tokens and functional group definitions
- Also initialises examples
+ Given an AST as an ASTAlkaneBase, return a copy of the AST. Fully copies all arrays present in the original AST so there
+ are no unwanted links between the original and the copy.
  </summary>
-	<param name="sender">Sent automatically by system</param>
-	<param name="e">Sent automatically by system</param>
+	<param name="origAST">The AST to copy</param>
+	<returns>A copy of origAST</returns>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.handleExampleMenuItemClick(System.Object,System.Windows.RoutedEventArgs)">
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateASTAlkaneBase(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],System.Boolean,System.String[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[]@,OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[]@)">
 	<summary>
- Handles all click events from examples. Searches through examples for matching example and parses and displays it
+ Given a the name of an organic compound or substituent fragment, an array of tokens representing this name, an array of 
+ token definitions, an indication if the given name contains the main chain of the compound and the locants of the chain
+ if it isn't, return an ASTAlkaneBase structure representing this object. Deals with nested main chains (complex substituents)
+ recursively. Doesn't initialise the branches variable, used while rendering.
+ 1000 line function justification: In reality, parsing tokens and generating an AST  would be done using a finite state 
+ automata. This function was implemented without a finite state automata due to the author's lack of knowledge regarding
+ its implementation. This resulted in a large amount of code with many conditional and repetition control structures used
+ in this function. While the function is a 1000 lines long, it still only does one logical task - parse a list of tokens 
+ into an AST.
  </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.parseAndDisplay(System.String)">
+	<param name="organicNameString">
+ A string containing the name of the organic compound (used in error messages). In the case of a complex substituent, the
+ complex substituent fragment is expected (e.g but-1-enyl)
+ </param>
+	<param name="nameTokens">An array of Token objects representing the name to be parsed</param>
+	<param name="isMainChain">A boolean that is true if the given name contains the main chain, false if not</param>
+	<param name="locants">
+ An array containing the locants of the given complex substituent if not isMainChain
+ e.g. for 2-butyl, locants = {2}
+ If isMainChain, empty list should be given (e.g. {})
+ </param>
+	<param name="tokenDefinitions">An array of (generated) TokenDefinitions</param>
+	<param name="functionalGroupDefinitions">An array of (generated) FunctionalGroupDefinitions</param>
+	<returns>
+ If valid name, return an ASTAlkaneBase structure representing name
+ If invalid name, return an ASTAlkaneBase structure with the isError boolean flag set as True with a generated error message
+ present in the errorMessage variable
+ </returns>
+	<remarks>Should be called by the generateAST function, not by the user</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateAST(System.String,OrganicChemistryVisualiser.IUPACParser.Token[],OrganicChemistryVisualiser.IUPACParser.TokenDefinition[],OrganicChemistryVisualiser.IUPACParser.FunctionalGroupDefinition[])">
 	<summary>
- Given an organicName, uses the functions and subroutines present in IUPACParser and IUPACRenderer to display either an error for an incorrect name
- or a rendered picture of the compound
+ Generates an Abstract Syntax Tree in the format of an ASTRoot structure for a given organicCompound
  </summary>
-	<param name="organicName">A string containing the name to be rendered</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.saveToFile(System.String,System.String)">
+	<param name="organicNameString">A string containing the name of the compound to be parsed</param>
+	<param name="organicNameTokens">
+ An array of Token structures representing the compound to be parsed. Can be generated with the generateTokens 
+ function in this module.
+ </param>
+	<param name="tokenDefinitions">
+ An array of TokenDefinition structures representing the definitions of tokens present in the organicNameTokens array.
+ Can be generated with the generateTokenDefinitions function in this module.
+ </param>
+	<returns>
+ Returns an ASTRoot structure representing the organicCompound. If the name is invalid, compoundTree.isError will be 
+ true and compoundTree.errorMessage will contain the error message.
+ </returns>
+	<remarks>An ASTRoot structure representing the parsed organicCompound</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateFunctionalGroupChild(System.Xml.Linq.XElement)">
 	<summary>
- Given a file path and a name, save the name to the file
+ Generates a FunctionalGroupChild from a XElement the functional group is stored in. Can handle recursive cases.
+ Doesn't initialise branches.
  </summary>
-	<param name="filePath">A string containing the file path to save to</param>
-	<param name="name">The name to be saved to the file</param>
+	<param name="childXML">The XElement the child is stored in</param>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.openFile(System.String)">
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateFunctionalGroupDefinitions(System.Xml.Linq.XElement)">
 	<summary>
- Given a file path, load the name present in the file
+ Given the XElement of the XMl file containing the functional group definitions, parses them into a list of FunctionalGroupDefinition
+ structures. Can handle recursive cases.
  </summary>
-	<param name="filePath">The file path of the file to be read</param>
-	<returns>A string containing the name present in the file</returns>
+	<param name="allFunctionalGroupDefinitions">XElement containing functional group definitions file</param>
+	<returns>An array of FunctionalGroupDefinitions containing the definitions of the </returns>
 	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_setPlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokenDefinition(System.Xml.Linq.XElement,System.Xml.Linq.XElement)">
 	<summary>
- Sets the placeholder text 'Enter IUPAC name' to the user input textbox (textBox_userInput) when it loses focus. Also makes the text italic and gray.
+ Given a singular token definition as an XML node and all the token definitions in XML format, return a TokenDefinition
+ structure representing the token definition. Handles unpacking regexes and expanding contained tokens within other tokens
+ recursively.
+ For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
  </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_removePlaceHolderText(System.Object,System.Windows.RoutedEventArgs)">
+	<param name="tokenDefinitionXML">An XElement containing the token definition to be converted</param>
+	<param name="allTokenDefinitionsXML">An XElement containing all token definitions (used when tokenDefinitionXML contains other tokens)</param>
+	<returns>Returns a TokenDefinition representing tokenDefinitionXML</returns>
+	<remarks>Works for recursive definitions and expanded regexes.</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokenDefinitions(System.Xml.Linq.XElement)">
 	<summary>
- Removes the placeholder text and all styling from it for normal use when clicked on by user.
+ Given a XElement containing all token definitions in XML format, return an array of TokenDefinitions detailing given tokens.
+ For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
  </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.textBox_userInput_KeyDown(System.Object,System.Windows.Input.KeyEventArgs)">
+	<param name="allTokenDefinitionsXML">An XElement containing all tokens to be converted into a TokenDefinitions</param>
+	<returns>An array of TokenDefinitions</returns>
+	<remarks>Uses the createTokenDefinition function to create singular TokenDefinitions</remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.generateTokens(System.String,OrganicChemistryVisualiser.IUPACParser.TokenDefinition[])">
 	<summary>
- When a name is entered to textBox_userInput and the user presses enter, this subroutine calls parseAndDisplay with the entered name
+ Given an organicName and a tokenDefinition list, tokenise it, meaning convert the organic name into an array of Token structures.
+ The token array is then verified. If any error is encountered, returns the error in the form of an array of a single Token where
+ type="ERROR" and value contains the error details.
+ For more details regarding the parsing of XML, see the 'tokens.xml' file in the resources folder in the startup directory.
  </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_export_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<param name="organicName">A string containing the organicName to be tokenised</param>
+	<param name="tokenDefinitions">An array of tokenDefinitions used to tokenise the name</param>
+	<returns>An array of Token structures representing the organic name OR an array containing a single token whose type is ERROR and value contains an error message.</returns>
+	<remarks>The createTokenDefinitions function can be used to generate tokenDefinitions</remarks>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.ResourceManager">
 	<summary>
- Called when user clicks on the export menu item. Opens a file dialog and exports the loaded compound as an image into a file location
- of the users choice in either PNG or JPG format.
- </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_exit_Click(System.Object,System.Windows.RoutedEventArgs)">
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.Culture">
 	<summary>
- Called when user clicks on the exit menu item. Exits the application.
- </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_save_Click(System.Object,System.Windows.RoutedEventArgs)">
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.examples">
 	<summary>
- Called when user clicks on the save menu item. Opens a file dialog and saves the loaded compound into a file of the users choice.
- </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
-</member><member name="M:OrganicChemistryVisualiser.MainWindow.mi_load_Click(System.Object,System.Windows.RoutedEventArgs)">
+  Looks up a localized string similar to &lt;examples&gt;
+  &lt;example displayName="TNT"&gt;1-methyl-2,4,6-trinitrocyclohex-1,3,5-triene&lt;/example&gt;
+  &lt;example displayName="Dopamine"&gt;4-(2-aminoethyl)cyclohex-1,3,5-trien-1,2-diol&lt;/example&gt;"
+  &lt;example displayName="Ibuprofen"&gt;2-(4-(2-methylpropyl)cyclohex-1,3,5-triene)propan-1-oic acid&lt;/example&gt;
+  &lt;example displayName="Amphetamine"&gt;1-cyclohex-1,3,5-trienylpropan-2-amine&lt;/example&gt;
+  &lt;example displayName="Citric Acid"&gt;3-(1-carboxymethyl)pentan-3-ol-1,5-dioic acid&lt;/example&gt;
+  &lt;example displayName="Drinking Al [rest of string was truncated]";.
+</summary>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.functionalGroups">
 	<summary>
- Called when the user clicks on the open menu item. Opens a file dialog for the user to choose a file to open and loads the name
- stored in this file
- </summary>
-	<param name="sender">Reference to the control which called the subroutine</param>
-	<param name="e">Provides more information about the event that caused this subroutine to be called</param>
-	<remarks></remarks>
+  Looks up a localized string similar to &lt;functionalGroups&gt;
+  &lt;functionalGroup type="acetyl"&gt;
+    &lt;child&gt;
+      &lt;representor&gt;&lt;/representor&gt;
+      &lt;bondType&gt;1&lt;/bondType&gt;
+      &lt;colour&gt;#0ea528&lt;/colour&gt;
+      &lt;child&gt;
+        &lt;representor&gt; O&lt;/representor&gt;
+        &lt;bondType&gt;2&lt;/bondType&gt;
+        &lt;colour&gt;#0ea528&lt;/colour&gt;
+      &lt;/child&gt;
+      &lt;child&gt;
+        &lt;representor&gt;&lt;/representor&gt;
+        &lt;bondType&gt;1&lt;/bondType&gt;
+        &lt;colour&gt;#0ea528&lt;/colour&gt;
+      &lt;/child&gt;
+    &lt;/child&gt;
+  &lt;/functionalGroup&gt;
+
+  &lt;functionalGroup type="fluoro"&gt;
+    &lt;child&gt;
+      &lt;repre [rest of string was truncated]";.
+</summary>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.icon">
+	<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.tokens">
+	<summary>
+  Looks up a localized string similar to &lt;!--
+████████╗ ██████╗ ██╗  ██╗███████╗███╗   ██╗███████╗   ██╗  ██╗███╗   ███╗██╗     
+╚══██╔══╝██╔═══██╗██║ ██╔╝██╔════╝████╗  ██║██╔════╝   ╚██╗██╔╝████╗ ████║██║     
+   ██║   ██║   ██║█████╔╝ █████╗  ██╔██╗ ██║███████╗    ╚███╔╝ ██╔████╔██║██║     
+   ██║   ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╗██║╚════██║    ██╔██╗ ██║╚██╔╝██║██║     
+   ██║   ╚██████╔╝██║  ██╗███████╗██║ ╚████║███████║██╗██╔╝ ██╗██║ ╚═╝ ██║███████╗
+   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
+
+Tokens d [rest of string was truncated]";.
+</summary>
+</member><member name="T:OrganicChemistryVisualiser.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

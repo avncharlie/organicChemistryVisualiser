@@ -59,5 +59,77 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;examples&gt;
+        '''  &lt;example displayName=&quot;TNT&quot;&gt;1-methyl-2,4,6-trinitrocyclohex-1,3,5-triene&lt;/example&gt;
+        '''  &lt;example displayName=&quot;Dopamine&quot;&gt;4-(2-aminoethyl)cyclohex-1,3,5-trien-1,2-diol&lt;/example&gt;&quot;
+        '''  &lt;example displayName=&quot;Ibuprofen&quot;&gt;2-(4-(2-methylpropyl)cyclohex-1,3,5-triene)propan-1-oic acid&lt;/example&gt;
+        '''  &lt;example displayName=&quot;Amphetamine&quot;&gt;1-cyclohex-1,3,5-trienylpropan-2-amine&lt;/example&gt;
+        '''  &lt;example displayName=&quot;Citric Acid&quot;&gt;3-(1-carboxymethyl)pentan-3-ol-1,5-dioic acid&lt;/example&gt;
+        '''  &lt;example displayName=&quot;Drinking Al [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property examples() As String
+            Get
+                Return ResourceManager.GetString("examples", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;functionalGroups&gt;
+        '''  &lt;functionalGroup type=&quot;acetyl&quot;&gt;
+        '''    &lt;child&gt;
+        '''      &lt;representor&gt;&lt;/representor&gt;
+        '''      &lt;bondType&gt;1&lt;/bondType&gt;
+        '''      &lt;colour&gt;#0ea528&lt;/colour&gt;
+        '''      &lt;child&gt;
+        '''        &lt;representor&gt; O&lt;/representor&gt;
+        '''        &lt;bondType&gt;2&lt;/bondType&gt;
+        '''        &lt;colour&gt;#0ea528&lt;/colour&gt;
+        '''      &lt;/child&gt;
+        '''      &lt;child&gt;
+        '''        &lt;representor&gt;&lt;/representor&gt;
+        '''        &lt;bondType&gt;1&lt;/bondType&gt;
+        '''        &lt;colour&gt;#0ea528&lt;/colour&gt;
+        '''      &lt;/child&gt;
+        '''    &lt;/child&gt;
+        '''  &lt;/functionalGroup&gt;
+        '''
+        '''  &lt;functionalGroup type=&quot;fluoro&quot;&gt;
+        '''    &lt;child&gt;
+        '''      &lt;repre [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property functionalGroups() As String
+            Get
+                Return ResourceManager.GetString("functionalGroups", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property icon() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("icon", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;!--
+        '''████████╗ ██████╗ ██╗  ██╗███████╗███╗   ██╗███████╗   ██╗  ██╗███╗   ███╗██╗     
+        '''╚══██╔══╝██╔═══██╗██║ ██╔╝██╔════╝████╗  ██║██╔════╝   ╚██╗██╔╝████╗ ████║██║     
+        '''   ██║   ██║   ██║█████╔╝ █████╗  ██╔██╗ ██║███████╗    ╚███╔╝ ██╔████╔██║██║     
+        '''   ██║   ██║   ██║██╔═██╗ ██╔══╝  ██║╚██╗██║╚════██║    ██╔██╗ ██║╚██╔╝██║██║     
+        '''   ██║   ╚██████╔╝██║  ██╗███████╗██║ ╚████║███████║██╗██╔╝ ██╗██║ ╚═╝ ██║███████╗
+        '''   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
+        '''
+        '''Tokens d [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property tokens() As String
+            Get
+                Return ResourceManager.GetString("tokens", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

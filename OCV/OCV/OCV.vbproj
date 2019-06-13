@@ -215,5 +215,23 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\resources\tokens.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\resources\examples.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\resources\functionalGroups.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\resources\carbonRings.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\resources\carbonRings.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
