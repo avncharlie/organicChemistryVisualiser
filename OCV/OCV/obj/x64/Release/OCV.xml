@@ -295,6 +295,14 @@ Application
  Module used to define the properties that are available in the My Namespace for WPF
  </summary>
 	<remarks></remarks>
+</member><member name="M:OrganicChemistryVisualiser.IUPACParser.preprocessing(System.String,System.Xml.Linq.XElement)">
+	<summary>
+ replaces whatever replacements need to be made and converts to lowercase
+ </summary>
+	<param name="organicName"></param>
+	<param name="replacementsRoot"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:OrganicChemistryVisualiser.IUPACParser.copyAST(OrganicChemistryVisualiser.IUPACParser.ASTAlkaneBase)">
 	<summary>
  Given an AST as an ASTAlkaneBase, return a copy of the AST. Fully copies all arrays present in the original AST so there
@@ -445,6 +453,16 @@ Application
 </member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.icon">
 	<summary>
   Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.replacements">
+	<summary>
+  Looks up a localized string similar to &lt;replacements&gt;
+
+  &lt;replacement name="benzene"&gt;cyclohex-1,3,5-triene&lt;/replacement&gt;
+  &lt;replacement name="phenyl"&gt;cyclohex-1,3,5-trienyl&lt;/replacement&gt;
+
+&lt;/replacements&gt;
+.
 </summary>
 </member><member name="P:OrganicChemistryVisualiser.My.Resources.Resources.tokens">
 	<summary>

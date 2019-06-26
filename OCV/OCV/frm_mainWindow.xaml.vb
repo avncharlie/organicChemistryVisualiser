@@ -102,6 +102,11 @@
             c_containerDisplay.Height = 10
             c_containerDisplay.Width = 10
         Else
+            ' preprocessing
+            Dim replacements As New XDocument()
+            replacements = XDocument.Load(New System.IO.StringReader(My.Resources.replacements))
+            organicName = IUPACParser.preprocessing(organicName, replacements.Root)
+
             ' tokenise example name
             Dim tokens As Token()
             tokens = IUPACParser.generateTokens(organicName, tokenDefinitions)

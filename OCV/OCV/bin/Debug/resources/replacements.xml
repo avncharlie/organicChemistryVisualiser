@@ -1,0 +1,21 @@
+<replacements>
+  
+  <replacement name="ethene">eth-1-ene</replacement>
+  <replacement name="ethen">eth-1-en</replacement>
+  
+  <replacement name="ethyne">eth-1-yne</replacement>
+  <replacement name="ethyn">eth-1-yn</replacement>
+
+  <replacement name="propene">prop-1-ene</replacement>
+  <replacement name="propen">prop-1-ene</replacement>
+
+  <replacement name="propyne">prop-1-yne</replacement>
+  <replacement name="propyn">prop-1-yne</replacement>
+  
+  <replacement name="benzene">cyclohex-1,3,5-triene</replacement>
+  <replacement name="benzen">cyclohex-1,3,5-triene</replacement>
+  
+  <replacement name="phenyl">cyclohex-1,3,5-trienyl</replacement>
+
+  
+</replacements>

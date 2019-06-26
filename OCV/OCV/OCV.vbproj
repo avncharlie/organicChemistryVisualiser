@@ -11,6 +11,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <MyType>Custom</MyType>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>\\Mac\Home\Desktop\OCV\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
@@ -25,7 +26,6 @@
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -232,6 +232,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\resources\carbonRings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\resources\replacements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

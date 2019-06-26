@@ -116,6 +116,21 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to &lt;replacements&gt;
+        '''
+        '''  &lt;replacement name=&quot;benzene&quot;&gt;cyclohex-1,3,5-triene&lt;/replacement&gt;
+        '''  &lt;replacement name=&quot;phenyl&quot;&gt;cyclohex-1,3,5-trienyl&lt;/replacement&gt;
+        '''
+        '''&lt;/replacements&gt;
+        '''.
+        '''</summary>
+        Friend ReadOnly Property replacements() As String
+            Get
+                Return ResourceManager.GetString("replacements", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &lt;!--
         '''████████╗ ██████╗ ██╗  ██╗███████╗███╗   ██╗███████╗   ██╗  ██╗███╗   ███╗██╗     
         '''╚══██╔══╝██╔═══██╗██║ ██╔╝██╔════╝████╗  ██║██╔════╝   ╚██╗██╔╝████╗ ████║██║     

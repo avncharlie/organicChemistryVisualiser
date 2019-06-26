@@ -61,6 +61,21 @@ Module IUPACParser
     End Structure
 
     ''' <summary>
+    ''' replaces whatever replacements need to be made and converts to lowercase
+    ''' </summary>
+    ''' <param name="organicName"></param>
+    ''' <param name="replacementsRoot"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function preprocessing(ByVal organicName As String, ByVal replacementsRoot As XElement)
+        organicName = organicName.ToLower()
+        For Each replacement In replacementsRoot.Elements("replacement")
+            organicName = System.Text.RegularExpressions.Regex.Replace(organicName, replacement.Attribute("name").Value, replacement.Value)
+        Next
+        Return organicName
+    End Function
+
+    ''' <summary>
     ''' Given an AST as an ASTAlkaneBase, return a copy of the AST. Fully copies all arrays present in the original AST so there
     ''' are no unwanted links between the original and the copy.
     ''' </summary>
