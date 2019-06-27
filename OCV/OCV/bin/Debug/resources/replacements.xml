@@ -1,4 +1,8 @@
 <replacements>
+
+  <replacement name="isopropyl">(1,1-dimethylmethyl)</replacement>
+  <replacement name="tertbutyl">(1,1,1-trimethylmethyl)</replacement>
+  <replacement name="secbutyl">(1-methylpropyl)</replacement>
   
   <replacement name="ethene">eth-1-ene</replacement>
   <replacement name="ethen">eth-1-en</replacement>
