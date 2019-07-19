@@ -1,6 +1,6 @@
 # Organic Chemistry Visualiser
 
-> A tool to visualise organic compounds 
+> ⚛️ A tool to visualise organic compounds 
 
 OCV (Organic Chemistry Visualiser) is a project that parses basic IUPAC nomenclature and renders the described compound.
 
