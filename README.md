@@ -7,7 +7,7 @@ OCV (Organic Chemistry Visualiser) is a project that parses basic IUPAC nomencla
 ![Rendered image of TNT rendered in Organic Chemistry Visualiser (1-methyl-2,4,6-trinitrobenzene)](https://github.com/avncharlie/organicChemistryVisualiser/blob/master/Documentation/screenshots/tnt.png?raw=true)
 
 ## Usage
-OCV is a project I wrote to learn about how parsing and lexical analysis works. It should however be used as a visualiser, not as a IUPAC name verifyer. This is as it attempts to be as accurate in parsing but has many limitations (take a look "What OCV can't do" section). 
+OCV is a project I wrote to learn about how parsing and lexical analysis works. It should however be used as a visualiser, not as a IUPAC name verifier. This is as it attempts to be as accurate in parsing but has many limitations (take a look "What OCV can't do" section). 
 
 
 ## Use it
