@@ -24,7 +24,7 @@ If something isn't working like you think it should, make sure you read through 
   * Some simple cases have been patched - e.g. `ethene` can be entered instead of `eth-1-ene`. Specifically eth/ene/yne and prop/ene/yne names no longer need locants.
 * Locants outside a main chain – e.g. `1-hexene` will not parse. `hex-1-ene` should be used instead.
 * Nitrogen locants (e.g. `N-methyl`) are not supported.
-* Any functional group not supported.
+* Any functional group not listed in the "What OCV can do" section are not supported.
 * Take a look at the three "Complex Example" names for examples of complicated nested organic compounds. They give a good overview of OCV's functionality. 
 ![File menu in OCV showing the examples](https://github.com/avncharlie/organicChemistryVisualiser/blob/master/Documentation/screenshots/examples.png?raw=true)
 
